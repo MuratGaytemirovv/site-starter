@@ -1,0 +1,12 @@
+{
+  "order": 1,
+  "icon": "wrench",
+  "title": "[ЗАПОЛНИТЬ] Dienst 1",
+  "summary": "[ЗАПОЛНИТЬ] Eén zin: wat deze dienst is en voor wie.",
+  "image": null,
+  "imageAlt": "",
+  "body": [
+    "[ЗАПОЛНИТЬ] Wat houdt deze dienst in? Welke werken, materialen of opties?",
+    "[ЗАПОЛНИТЬ] Voor wie is ze bedoeld en wat levert het de klant op?"
+  ]
+}

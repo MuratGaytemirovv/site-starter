@@ -1,0 +1,53 @@
+---
+// FAQ on native <details> — works without JS. FAQPage JSON-LD is built from
+// the same data in the SEO pass (stage 2).
+import Section from '../Section.astro';
+import SectionHeading from '../SectionHeading.astro';
+import Icon from '../Icon.astro';
+import { facts, links } from '../../lib/site';
+import type { Content } from '../../lib/schema';
+import type { Tone } from '../../lib/sections';
+import type { UI } from '../../i18n/ui';
+
+interface Props {
+  t: UI;
+  content: Content['faq'];
+  tone: Tone;
+}
+const { t, content, tone } = Astro.props;
+---
+
+<Section
+  id={t.sections.faq.anchor}
+  tone={tone}
+  class="faq"
+  containerClass="grid grid-cols-1 gap-6 nav:grid-cols-[minmax(0,380px)_1fr] lg:gap-16"
+>
+  <div>
+    <SectionHeading eyebrow={content.eyebrow} title={content.title} class="pb-4!" />
+    <p data-reveal>
+      <a
+        href={links.tel}
+        class="inline-flex items-center gap-2 text-[16px] font-semibold text-heading underline decoration-primary decoration-2 underline-offset-4"
+      >
+        <Icon name="phone" class="h-4 w-4 text-primary-text" />
+        {facts.phone}
+      </a>
+    </p>
+  </div>
+  <div class="border-b border-line" data-reveal-group>
+    {
+      content.items.map((item, i) => (
+        <details class="group border-t border-line" open={i === 0} data-reveal>
+          <summary class="flex cursor-pointer list-none items-center justify-between gap-6 py-5 marker:content-none">
+            <span class="font-heading text-[17px] font-semibold text-heading lg:text-[19px]">{item.q}</span>
+            <span class="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-surface text-heading transition-colors group-open:bg-primary group-open:text-on-primary">
+              <Icon name="plus" class="h-4 w-4 transition-transform duration-300 group-open:rotate-45" />
+            </span>
+          </summary>
+          <p class="max-w-[620px] pb-6 text-[16px] leading-relaxed text-muted">{item.a}</p>
+        </details>
+      ))
+    }
+  </div>
+</Section>

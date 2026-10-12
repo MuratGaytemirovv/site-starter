@@ -1,0 +1,108 @@
+---
+// Hero in two layouts: "split" (text + photo side by side) and "cover"
+// (full-bleed photo under a dark overlay). The style preset picks the default;
+// sections.json → hero.variant overrides it.
+// H1 = what + where. One main button, one secondary. No reveal animation
+// here: hidden first-screen content delays LCP.
+import Container from '../Container.astro';
+import Icon from '../Icon.astro';
+import Img from '../Img.astro';
+import Button from '../Button.astro';
+import { isPlaceholder } from '../../lib/site';
+import type { Content, SectionId } from '../../lib/schema';
+import type { UI } from '../../i18n/ui';
+
+interface Props {
+  t: UI;
+  content: Content['hero'];
+  variant: 'split' | 'cover';
+  sections: SectionId[];
+}
+const { t, content, variant, sections } = Astro.props;
+
+const primaryHref = `#${t.sections.contact.anchor}`;
+const showSecondary = !!content.secondaryCta && sections.includes(content.secondaryTarget);
+const secondaryHref = `#${t.sections[content.secondaryTarget].anchor}`;
+const bullets = content.bullets.filter(Boolean);
+const cover = variant === 'cover';
+// Hero photo: sized for full width on phones, half width on desktop (split).
+const widths = cover ? [640, 1024, 1600, 2000] : [640, 960, 1280];
+const sizes = cover ? '100vw' : '(min-width: 960px) 50vw, 100vw';
+---
+
+<section
+  id={t.sections.hero.anchor}
+  class:list={['relative overflow-hidden', cover ? 'bg-ink text-on-ink' : 'bg-surface']}
+>
+  {
+    cover && (
+      <div class="absolute inset-0">
+        <Img src={content.image} alt={content.imageAlt} ratio="16/9" widths={widths} sizes={sizes} eager fill />
+        <div class="absolute inset-0 bg-[linear-gradient(100deg,color-mix(in_srgb,var(--color-ink)_94%,transparent)_0%,color-mix(in_srgb,var(--color-ink)_78%,transparent)_45%,color-mix(in_srgb,var(--color-ink)_35%,transparent)_100%)]" />
+      </div>
+    )
+  }
+
+  <Container
+    class:list={[
+      'relative grid items-center gap-10',
+      cover ? 'min-h-[min(84vh,760px)] py-20 lg:py-28' : 'py-12 nav:grid-cols-[1.05fr_1fr] lg:gap-16 lg:py-20',
+    ]}
+  >
+    <div class="flex max-w-[680px] flex-col gap-6">
+      {
+        content.eyebrow && (
+          <p
+            class:list={['font-heading text-[13px] font-semibold uppercase tracking-[0.14em]', cover ? 'text-primary-on-ink' : 'text-primary-text']}
+          >
+            {content.eyebrow}
+          </p>
+        )
+      }
+      <h1 class:list={['text-[36px] leading-[1.08] lg:text-[56px]', cover && 'text-on-ink']}>
+        {content.title}
+        {
+          content.titleAccent && (
+            <>
+              {' '}
+              <span class:list={['block', cover ? 'text-primary-on-ink' : 'text-primary-text']}>{content.titleAccent}</span>
+            </>
+          )
+        }
+      </h1>
+      {
+        content.subtitle && (
+          <p class:list={['max-w-[580px] text-[18px] leading-relaxed lg:text-[19px]', cover ? 'text-on-ink-muted' : 'text-muted']}>
+            {content.subtitle}
+          </p>
+        )
+      }
+      <div class="flex flex-wrap gap-3">
+        <Button href={primaryHref} size="lg" iconEnd="arrow-right">{content.primaryCta}</Button>
+        {showSecondary && <Button href={secondaryHref} size="lg" variant={cover ? 'outline-light' : 'outline'}>{content.secondaryCta}</Button>}
+      </div>
+      {
+        bullets.length > 0 && (
+          <ul
+            class:list={['mt-2 flex flex-col gap-3 border-t pt-6 sm:flex-row sm:flex-wrap sm:gap-x-7', cover ? 'border-on-ink/15' : 'border-line']}
+          >
+            {bullets.map((b) => (
+              <li class:list={['flex items-center gap-2.5 text-[15px] font-semibold', cover ? 'text-on-ink' : 'text-heading']}>
+                <Icon name="check" class:list={['h-4 w-4 shrink-0', cover ? 'text-primary-on-ink' : 'text-primary-text']} />
+                {b}
+              </li>
+            ))}
+          </ul>
+        )
+      }
+    </div>
+
+    {
+      !cover && (
+        <div class="relative overflow-hidden rounded-card">
+          <Img src={content.image} alt={isPlaceholder(content.imageAlt) ? '' : content.imageAlt} ratio="4/3" widths={widths} sizes={sizes} eager />
+        </div>
+      )
+    }
+  </Container>
+</section>

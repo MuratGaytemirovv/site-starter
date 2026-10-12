@@ -2,7 +2,7 @@
 
 Итог: репозиторий-заготовка, из которой новый сайт местного бизнеса собирается заполнением файлов данных; ферма агентов умеет делать это сама и выдавать превью-ссылку.
 
-## Этап 1 — Каркас из Bilto (сессия 1)
+## Этап 1 — Каркас из Bilto (сессия 1) ✅ 2026-10-12
 - Скопировать архитектуру Bilto без клиентского контента: Astro 7, Tailwind v4, `BaseLayout`, `SEO`, `CookieBanner`, секции (Hero, Diensten, Werkwijze, Waarom, Realisaties, Reviews, Faq, OfferteCta, Header/Footer/MobileBar).
 - Единый файл фактов `src/data/site-facts.json` (по образцу INGBELG): название, юр. данные, контакты, часы, город/регион, цифры, `launched`, `siteUrl`, языки.
 - Токены темы в одном месте (`@theme` в `global.css`): 2–3 цвета, 2 шрифта (`@fontsource`), радиусы. Смена бренда = правка токенов.
@@ -10,13 +10,15 @@
 - Content Collections: `services/`, `regions/`, `gallery/`, `reviews/` — JSON на элемент.
 - Заглушки `[ЗАПОЛНИТЬ]`, плейсхолдер-картинки.
 - `npm run build` проходит, Lighthouse mobile ≥ 95 на заглушках.
+- Итог: сделано; отличия от плана и решения — `.claude/notes/stage-1.md`. `visual-check` перенесён уже на этом этапе.
 
 ## Этап 2 — Форма, юридическое, SEO (сессия 2)
 - `/api/contact`: валидация, honeypot, rate limit → письмо (Resend) + Telegram (`notify-telegram.ts`) + опционально CRM; ошибки уведомлений не ломают ответ.
 - Privacy/cookie-политика и условия — шаблоны с подстановкой фактов (показать юристу перед первым реальным запуском).
 - schema.org (LocalBusiness/HomeAndConstructionBusiness, FAQPage, BreadcrumbList), sitemap с `lastmod`, robots, canonical/OG от `launched`; `X-Robots-Tag: noindex` на превью.
 - Многоязычность: `nl` основной, переключатель, тексты в данных по языкам.
-- `visual-check` из A&T: все страницы × 4 ширины, отчёт.
+- Ссылки на юр. страницы в подвале и рядом с формой; `og:image` по умолчанию.
+- Строки интерфейса `fr`/`en`/`ru` в `src/i18n/ui.ts`, маршруты `/fr/…`.
 
 ## Этап 3 — «Новый клиент одной командой» (сессия 3)
 - Схема данных клиента `client.schema.json` (+ пример `examples/demo-dakwerker.json`): всё, что нужно для сайта, в одном файле.

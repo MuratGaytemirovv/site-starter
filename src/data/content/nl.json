@@ -1,0 +1,104 @@
+{
+  "_comment": "Homepage texts in one language (file name = language code). Section labels may stay as they are; everything marked [ЗАПОЛНИТЬ] comes from the client. Images: path inside src/assets/images/, or null for a placeholder.",
+
+  "meta": {
+    "title": "[ЗАПОЛНИТЬ] Wat u doet in Gemeente — Bedrijfsnaam",
+    "description": "[ЗАПОЛНИТЬ] 1–2 zinnen: wat u doet, waar, en waarom klanten u kiezen (max. ~155 tekens)."
+  },
+
+  "hero": {
+    "eyebrow": "[ЗАПОЛНИТЬ] Gemeente · Regio",
+    "title": "[ЗАПОЛНИТЬ] Wat u doet in Gemeente",
+    "titleAccent": "[ЗАПОЛНИТЬ] korte belofte",
+    "subtitle": "[ЗАПОЛНИТЬ] Eén of twee zinnen die uitleggen voor wie u werkt en wat de klant ervan heeft.",
+    "primaryCta": "Vraag een offerte",
+    "secondaryCta": "Bekijk ons werk",
+    "secondaryTarget": "gallery",
+    "bullets": [
+      "[ЗАПОЛНИТЬ] Bevestigd voordeel 1",
+      "[ЗАПОЛНИТЬ] Bevestigd voordeel 2",
+      "[ЗАПОЛНИТЬ] Bevestigd voordeel 3"
+    ],
+    "image": null,
+    "imageAlt": ""
+  },
+
+  "trust": {
+    "items": [
+      { "icon": "shield-check", "label": "[ЗАПОЛНИТЬ] Garantie / verzekering" },
+      { "icon": "badge-check", "label": "[ЗАПОЛНИТЬ] Erkenning of keurmerk" },
+      { "icon": "clock", "label": "[ЗАПОЛНИТЬ] Reactietijd" },
+      { "icon": "map-pin", "label": "[ЗАПОЛНИТЬ] Werkgebied" }
+    ]
+  },
+
+  "services": {
+    "eyebrow": "Diensten",
+    "title": "[ЗАПОЛНИТЬ] Waarmee we u helpen",
+    "intro": "[ЗАПОЛНИТЬ] Korte inleiding op uw diensten."
+  },
+
+  "about": {
+    "eyebrow": "Over ons",
+    "title": "[ЗАПОЛНИТЬ] Wie we zijn",
+    "paragraphs": [
+      "[ЗАПОЛНИТЬ] Wie zit achter het bedrijf, sinds wanneer, waar.",
+      "[ЗАПОЛНИТЬ] Wat de klant van u kan verwachten."
+    ],
+    "image": null,
+    "imageAlt": ""
+  },
+
+  "process": {
+    "eyebrow": "Werkwijze",
+    "title": "Zo werken we",
+    "steps": [
+      { "title": "[ЗАПОЛНИТЬ] Contact", "text": "[ЗАПОЛНИТЬ] Wat er gebeurt na uw aanvraag." },
+      { "title": "[ЗАПОЛНИТЬ] Bezoek", "text": "[ЗАПОЛНИТЬ] Tweede stap." },
+      { "title": "[ЗАПОЛНИТЬ] Offerte", "text": "[ЗАПОЛНИТЬ] Derde stap." },
+      { "title": "[ЗАПОЛНИТЬ] Uitvoering", "text": "[ЗАПОЛНИТЬ] Vierde stap." }
+    ]
+  },
+
+  "whyUs": {
+    "eyebrow": "Waarom wij",
+    "title": "[ЗАПОЛНИТЬ] Waarom klanten voor ons kiezen",
+    "items": [
+      { "icon": "user-check", "title": "[ЗАПОЛНИТЬ] Reden 1", "text": "[ЗАПОЛНИТЬ] Korte uitleg met een concreet, bevestigd feit." },
+      { "icon": "calendar-check", "title": "[ЗАПОЛНИТЬ] Reden 2", "text": "[ЗАПОЛНИТЬ] Korte uitleg met een concreet, bevestigd feit." },
+      { "icon": "receipt", "title": "[ЗАПОЛНИТЬ] Reden 3", "text": "[ЗАПОЛНИТЬ] Korte uitleg met een concreet, bevestigd feit." }
+    ]
+  },
+
+  "gallery": {
+    "eyebrow": "Realisaties",
+    "title": "[ЗАПОЛНИТЬ] Recent werk",
+    "intro": ""
+  },
+
+  "reviews": {
+    "eyebrow": "Reviews",
+    "title": "Wat klanten zeggen"
+  },
+
+  "faq": {
+    "eyebrow": "FAQ",
+    "title": "Veelgestelde vragen",
+    "items": [
+      { "q": "[ЗАПОЛНИТЬ] Vraag die klanten vaak stellen?", "a": "[ЗАПОЛНИТЬ] Kort, eerlijk antwoord." },
+      { "q": "[ЗАПОЛНИТЬ] In welke regio werkt u?", "a": "[ЗАПОЛНИТЬ] Gemeenten en straal." },
+      { "q": "[ЗАПОЛНИТЬ] Hoe snel kunt u starten?", "a": "[ЗАПОЛНИТЬ] Realistische termijn." },
+      { "q": "[ЗАПОЛНИТЬ] Wat kost een offerte?", "a": "[ЗАПОЛНИТЬ] Antwoord." }
+    ]
+  },
+
+  "contact": {
+    "eyebrow": "Contact",
+    "title": "[ЗАПОЛНИТЬ] Vertel ons over uw project",
+    "text": "[ЗАПОЛНИТЬ] Wat er gebeurt nadat iemand het formulier verstuurt."
+  },
+
+  "footer": {
+    "tagline": "[ЗАПОЛНИТЬ] Korte omschrijving van het bedrijf."
+  }
+}

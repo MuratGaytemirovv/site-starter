@@ -1,0 +1,74 @@
+---
+// Service pages: /<slug> for every item in src/content/services/<lang>/.
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Container from '../components/Container.astro';
+import Icon from '../components/Icon.astro';
+import Img from '../components/Img.astro';
+import Button from '../components/Button.astro';
+import { defaultLang, facts } from '../lib/site';
+import { getServices, type Service } from '../lib/collections';
+import { ui } from '../i18n/ui';
+
+export async function getStaticPaths() {
+  const services = await getServices(defaultLang);
+  return services.map((service) => ({
+    params: { slug: service.slug },
+    props: { service, others: services.filter((s) => s.key !== service.key) },
+  }));
+}
+
+interface Props {
+  service: Service;
+  others: Service[];
+}
+const { service, others } = Astro.props;
+const t = ui(defaultLang);
+---
+
+<BaseLayout title={`${service.title} — ${facts.name}`} description={service.summary}>
+  <section class="bg-surface py-12 lg:py-20">
+    <Container class="grid grid-cols-1 items-center gap-10 nav:grid-cols-2 lg:gap-16">
+      <div class="flex flex-col gap-5">
+        <span class="flex h-12 w-12 items-center justify-center rounded-card bg-primary text-on-primary">
+          <Icon name={service.icon} class="h-6 w-6" />
+        </span>
+        <h1 class="text-[34px] leading-[1.1] lg:text-[50px]">{service.title}</h1>
+        <p class="max-w-xl text-[18px] leading-relaxed text-muted">{service.summary}</p>
+        <div class="flex flex-wrap gap-3">
+          <Button href={`/#${t.sections.contact.anchor}`} size="lg" iconEnd="arrow-right">{t.cta.quote}</Button>
+        </div>
+      </div>
+      <div class="overflow-hidden rounded-card">
+        <Img src={service.image} alt={service.imageAlt} icon={service.icon} widths={[640, 960, 1280]} sizes="(min-width: 960px) 50vw, 100vw" eager />
+      </div>
+    </Container>
+  </section>
+
+  <section class="py-section lg:py-section-lg">
+    <Container class="grid grid-cols-1 gap-12 nav:grid-cols-[1fr_320px] lg:gap-20">
+      <div class="flex max-w-[68ch] flex-col gap-5 text-[17px] leading-relaxed lg:text-[18px]">
+        {service.body.map((p) => <p>{p}</p>)}
+      </div>
+      {
+        others.length > 0 && (
+          <aside>
+            <p class="font-heading text-[13px] font-semibold uppercase tracking-[0.14em] text-primary-text">{t.services.other}</p>
+            <ul class="mt-4 flex flex-col border-t border-line">
+              {others.map((s) => (
+                <li class="border-b border-line">
+                  <a href={`/${s.slug}`} class="group flex items-center justify-between gap-3 py-4 font-semibold text-heading">
+                    <span class="flex items-center gap-3">
+                      <Icon name={s.icon} class="h-5 w-5 shrink-0 text-primary-text" />
+                      {s.title}
+                    </span>
+                    <Icon name="arrow-right" class="h-4 w-4 shrink-0 transition-transform group-hover:translate-x-1" />
+                  </a>
+                </li>
+              ))}
+            </ul>
+          </aside>
+        )
+      }
+    </Container>
+  </section>
+</BaseLayout>

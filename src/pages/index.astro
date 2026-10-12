@@ -1,0 +1,63 @@
+---
+// Homepage = the sections from src/data/sections.json, in that order. Nothing
+// client-specific here: order, on/off and variants are data.
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Hero from '../components/sections/Hero.astro';
+import Trust from '../components/sections/Trust.astro';
+import Services from '../components/sections/Services.astro';
+import About from '../components/sections/About.astro';
+import Process from '../components/sections/Process.astro';
+import Gallery from '../components/sections/Gallery.astro';
+import WhyUs from '../components/sections/WhyUs.astro';
+import Reviews from '../components/sections/Reviews.astro';
+import Faq from '../components/sections/Faq.astro';
+import Contact from '../components/sections/Contact.astro';
+import { defaultLang, facts, getContent, sectionVariant } from '../lib/site';
+import { getGallery, getReviews, getServices } from '../lib/collections';
+import { tonesFor, visibleSections } from '../lib/sections';
+import { themeFor } from '../lib/theme';
+import { HERO_VARIANTS } from '../lib/schema';
+import { ui } from '../i18n/ui';
+
+const lang = defaultLang;
+const t = ui(lang);
+const content = getContent(lang);
+const sections = await visibleSections(lang);
+const tones = tonesFor(sections);
+const [services, gallery, reviews] = await Promise.all([getServices(lang), getGallery(lang), getReviews()]);
+
+const heroVariantRaw = sectionVariant('hero') ?? themeFor(facts).heroVariant;
+if (!(HERO_VARIANTS as readonly string[]).includes(heroVariantRaw)) {
+  throw new Error(`sections.json: hero.variant "${heroVariantRaw}" — expected one of ${HERO_VARIANTS.join(', ')}`);
+}
+const heroVariant = heroVariantRaw as (typeof HERO_VARIANTS)[number];
+---
+
+<BaseLayout title={content.meta.title} description={content.meta.description}>
+  {
+    sections.map((id) => {
+      switch (id) {
+        case 'hero':
+          return <Hero t={t} content={content.hero} variant={heroVariant} sections={sections} />;
+        case 'trust':
+          return <Trust t={t} content={content.trust} tone={tones.trust} />;
+        case 'services':
+          return <Services t={t} content={content.services} services={services} tone={tones.services} />;
+        case 'about':
+          return <About t={t} content={content.about} tone={tones.about} />;
+        case 'process':
+          return <Process t={t} content={content.process} tone={tones.process} />;
+        case 'gallery':
+          return <Gallery t={t} content={content.gallery} items={gallery} tone={tones.gallery} />;
+        case 'why-us':
+          return <WhyUs t={t} content={content.whyUs} tone={tones['why-us']} />;
+        case 'reviews':
+          return <Reviews t={t} content={content.reviews} reviews={reviews} tone={tones.reviews} />;
+        case 'faq':
+          return <Faq t={t} content={content.faq} tone={tones.faq} />;
+        case 'contact':
+          return <Contact t={t} content={content.contact} services={services} />;
+      }
+    })
+  }
+</BaseLayout>

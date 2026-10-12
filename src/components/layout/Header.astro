@@ -1,0 +1,91 @@
+---
+// Sticky header with a fixed height (only a shadow on scroll — a changing
+// height breaks scroll anchoring). Links are "/#anchor", never "#anchor", so
+// they also work from service and region pages.
+import Icon from '../Icon.astro';
+import Logo from '../Logo.astro';
+import Button from '../Button.astro';
+import { facts, links } from '../../lib/site';
+import type { SectionId } from '../../lib/schema';
+import type { UI } from '../../i18n/ui';
+
+interface Props {
+  t: UI;
+  sections: SectionId[];
+}
+const { t, sections } = Astro.props;
+
+const href = (id: SectionId) => `/#${t.sections[id].anchor}`;
+const desktop = t.headerNav.filter((id) => sections.includes(id));
+const mobile = sections.filter((id) => id !== 'hero' && id !== 'trust' && t.sections[id].nav);
+const hasContact = sections.includes('contact');
+---
+
+{/* No backdrop-filter here: it would turn the header into the containing block of the fixed mobile menu. */}
+<header class="site-header sticky top-0 z-50 border-b border-line bg-bg transition-shadow duration-300">
+  <div class="mx-auto flex h-[72px] max-w-[1240px] items-center justify-between gap-6 px-gutter lg:h-20 lg:px-gutter-lg">
+    {/* An image logo never shrinks (flex would squeeze it to 0); a text logo may wrap. */}
+    <a href="/" class:list={['flex items-center', facts.logo ? 'shrink-0' : 'min-w-0']} aria-label={`${facts.name} — ${t.nav.home}`}>
+      <Logo />
+    </a>
+
+    <nav class="hidden items-center gap-7 nav:flex" aria-label={t.nav.main}>
+      {
+        desktop.map((id) => (
+          <a href={href(id)} class="group relative py-2 text-[15px] font-medium text-heading">
+            {t.sections[id].nav}
+            <span class="absolute inset-x-0 -bottom-0.5 h-0.5 origin-left scale-x-0 bg-primary transition-transform duration-300 group-hover:scale-x-100" />
+          </a>
+        ))
+      }
+    </nav>
+
+    <div class="hidden items-center gap-5 nav:flex">
+      <a href={links.tel} class="flex items-center gap-2 text-[15px] font-semibold text-heading hover:text-primary-text">
+        <Icon name="phone" class="h-4 w-4 text-primary-text" />
+        {facts.phone}
+      </a>
+      {hasContact && <Button href={href('contact')}>{t.cta.quote}</Button>}
+    </div>
+
+    <input type="checkbox" id="nav-toggle" class="peer sr-only" />
+    <label
+      for="nav-toggle"
+      class="flex h-11 w-11 shrink-0 cursor-pointer items-center justify-center rounded-button border border-line text-heading nav:hidden"
+    >
+      <span class="sr-only">{t.nav.openMenu}</span>
+      <Icon name="menu" class="h-6 w-6" />
+    </label>
+
+    <div
+      id="mobile-menu"
+      class="invisible fixed inset-0 z-50 flex flex-col overflow-y-auto bg-bg px-gutter py-5 opacity-0 transition-[opacity,visibility] duration-200 peer-checked:visible peer-checked:opacity-100 nav:hidden"
+    >
+      <div class="mb-6 flex items-center justify-between gap-4">
+        <div class="min-w-0"><Logo /></div>
+        <label for="nav-toggle" class="flex h-11 w-11 shrink-0 cursor-pointer items-center justify-center rounded-full bg-surface">
+          <span class="sr-only">{t.nav.closeMenu}</span>
+          <Icon name="x" class="h-5 w-5" />
+        </label>
+      </div>
+      <nav class="flex flex-col gap-1" aria-label={t.nav.mobile}>
+        {
+          mobile.map((id) => (
+            <a href={href(id)} class="rounded-card px-2 py-3 font-heading text-[20px] font-semibold text-heading hover:bg-surface">
+              {t.sections[id].nav}
+            </a>
+          ))
+        }
+      </nav>
+      <div class="mt-auto flex flex-col gap-3 border-t border-line pt-5">
+        <a href={links.tel} class="flex items-center gap-2 text-[15px] font-medium text-heading">
+          <Icon name="phone" class="h-4 w-4 text-primary-text" />{facts.phone}
+        </a>
+        <a href={links.mail} class="flex min-w-0 items-center gap-2 text-[15px] font-medium text-heading">
+          <Icon name="mail" class="h-4 w-4 shrink-0 text-primary-text" /><span class="truncate">{facts.email}</span>
+        </a>
+        {hasContact && <Button href={href('contact')} size="lg" class="mt-2">{t.cta.quote}</Button>}
+      </div>
+    </div>
+  </div>
+</header>

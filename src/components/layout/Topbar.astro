@@ -1,0 +1,49 @@
+---
+// Slim bar above the header (desktop only): phone, WhatsApp, rating, address.
+// Turned on/off with `topbar` in sections.json. Rating only when real.
+import Icon from '../Icon.astro';
+import { addressLine, facts, links } from '../../lib/site';
+import type { UI } from '../../i18n/ui';
+
+interface Props {
+  t: UI;
+}
+const { t } = Astro.props;
+const item = 'flex items-center gap-2 transition-colors hover:text-on-ink';
+---
+
+<div class="hidden bg-ink text-[13px] text-on-ink-muted nav:block">
+  <div class="mx-auto flex h-10 max-w-[1240px] items-center justify-between gap-6 px-gutter lg:px-gutter-lg">
+    <div class="flex items-center gap-6">
+      <a href={links.tel} class={item}><Icon name="phone" class="h-3.5 w-3.5 text-primary-on-ink" />{facts.phone}</a>
+      {
+        links.whatsapp && (
+          <a href={links.whatsapp} target="_blank" rel="noopener" class={item}>
+            <Icon name="whatsapp" class="h-3.5 w-3.5 text-primary-on-ink" />
+            {t.cta.whatsapp}
+          </a>
+        )
+      }
+      <a href={links.mail} class={item}><Icon name="mail" class="h-3.5 w-3.5 text-primary-on-ink" />{facts.email}</a>
+    </div>
+    <div class="flex items-center gap-6">
+      {
+        facts.reviews.score && facts.reviews.googleUrl && (
+          <a href={facts.reviews.googleUrl} target="_blank" rel="noopener" class={item}>
+            <Icon name="star" class="h-3.5 w-3.5 fill-current text-primary-on-ink" />
+            {facts.reviews.score}
+            {facts.reviews.count && ` · ${facts.reviews.count} reviews`}
+          </a>
+        )
+      }
+      {
+        facts.showAddress && (
+          <span class="flex items-center gap-2">
+            <Icon name="map-pin" class="h-3.5 w-3.5 text-primary-on-ink" />
+            {addressLine}
+          </span>
+        )
+      }
+    </div>
+  </div>
+</div>

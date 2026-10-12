@@ -1,0 +1,21 @@
+---
+// Wrapper for homepage sections: anchor id, background tone, vertical rhythm.
+// scroll-mt keeps the heading clear of the sticky header after a menu jump.
+import Container from './Container.astro';
+import type { Tone } from '../lib/sections';
+
+interface Props {
+  id: string;
+  tone?: Tone | 'dark';
+  class?: string;
+  containerClass?: string;
+}
+const { id, tone = 'base', class: className = '', containerClass = '' } = Astro.props;
+const bg = { base: 'bg-bg', alt: 'bg-surface', dark: 'bg-ink text-on-ink' }[tone];
+---
+
+<section id={id} class:list={['scroll-mt-20 py-section lg:py-section-lg', bg, className]}>
+  <Container class={containerClass}>
+    <slot />
+  </Container>
+</section>

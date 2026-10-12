@@ -1,0 +1,123 @@
+---
+// Hidden by default; the script shows it only when no choice is stored, so it
+// never flashes for returning visitors and never appears without JS (without
+// JS nothing third-party is loaded either).
+import type { UI } from '../i18n/ui';
+
+interface Props {
+  t: UI;
+}
+const { t } = Astro.props;
+const c = t.cookies;
+const btn =
+  'min-h-11 rounded-button px-5 py-2.5 text-[14px] font-semibold transition-[background-color,translate] duration-200 hover:-translate-y-0.5';
+---
+
+<div
+  id="cookie-banner"
+  hidden
+  data-state="closed"
+  class="fixed inset-x-0 bottom-16 z-40 translate-y-4 border-t border-ink-line bg-ink px-gutter py-5 text-on-ink opacity-0 transition-[opacity,translate] duration-300 ease-out data-[state=open]:translate-y-0 data-[state=open]:opacity-100 nav:bottom-0 lg:px-gutter-lg"
+  role="region"
+  aria-label={c.label}
+>
+  <div class="mx-auto flex max-w-[1240px] flex-col gap-4">
+    <div class="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
+      <p class="max-w-[720px] text-[14px] leading-relaxed text-on-ink-muted">{c.text}</p>
+      <div class="flex shrink-0 flex-wrap gap-3">
+        <button type="button" data-cookie-action="settings" aria-expanded="false" aria-controls="cookie-settings" class:list={[btn, 'border border-on-ink/30 hover:bg-on-ink/10']}>
+          {c.settings}
+        </button>
+        <button type="button" data-cookie-action="reject" class:list={[btn, 'border border-on-ink/30 hover:bg-on-ink/10']}>
+          {c.reject}
+        </button>
+        <button type="button" data-cookie-action="accept" class:list={[btn, 'bg-primary text-on-primary hover:bg-primary-hover']}>
+          {c.accept}
+        </button>
+      </div>
+    </div>
+
+    <div id="cookie-settings" hidden class="flex flex-col gap-4 border-t border-ink-line pt-4">
+      <label class="flex items-start gap-3">
+        <input type="checkbox" checked disabled class="mt-1 h-4 w-4 accent-[var(--color-primary)]" />
+        <span class="text-[14px] leading-relaxed text-on-ink-muted">
+          <span class="font-semibold text-on-ink">{c.necessary}</span> — {c.necessaryText}
+        </span>
+      </label>
+      <label class="flex cursor-pointer items-start gap-3">
+        <input type="checkbox" data-consent-toggle="media" class="mt-1 h-4 w-4 cursor-pointer accent-[var(--color-primary)]" />
+        <span class="text-[14px] leading-relaxed text-on-ink-muted">
+          <span class="font-semibold text-on-ink">{c.media}</span> — {c.mediaText}
+        </span>
+      </label>
+      <div>
+        <button type="button" data-cookie-action="save" class:list={[btn, 'bg-primary text-on-primary hover:bg-primary-hover']}>
+          {c.save}
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  import { applyConsent, readConsent, saveConsent } from '../scripts/consent';
+
+  const banner = document.getElementById('cookie-banner');
+  const settings = document.getElementById('cookie-settings');
+  const settingsButton = banner?.querySelector<HTMLButtonElement>('[data-cookie-action="settings"]');
+  const mediaToggle = banner?.querySelector<HTMLInputElement>('[data-consent-toggle="media"]');
+
+  function setSettingsOpen(open: boolean) {
+    if (!settings || !settingsButton) return;
+    settings.hidden = !open;
+    settingsButton.setAttribute('aria-expanded', String(open));
+  }
+
+  function show({ withSettings = false } = {}) {
+    if (!banner) return;
+    if (mediaToggle) mediaToggle.checked = readConsent()?.media ?? false;
+    setSettingsOpen(withSettings);
+    banner.hidden = false;
+    // Forced reflow so the start state applies before the transition. Not
+    // requestAnimationFrame: it pauses in background tabs (Bilto lesson).
+    void banner.offsetWidth;
+    banner.dataset.state = 'open';
+  }
+
+  function hide() {
+    if (!banner) return;
+    banner.dataset.state = 'closed';
+    // Timeout instead of transitionend: with reduced motion there is none.
+    window.setTimeout(() => {
+      banner.hidden = true;
+    }, 320);
+  }
+
+  function choose(media: boolean) {
+    saveConsent({ media });
+    hide();
+  }
+
+  banner?.addEventListener('click', (event) => {
+    const action = (event.target as HTMLElement).closest<HTMLElement>('[data-cookie-action]')?.dataset.cookieAction;
+    if (action === 'accept') choose(true);
+    else if (action === 'reject') choose(false);
+    else if (action === 'save') choose(mediaToggle?.checked ?? false);
+    else if (action === 'settings') setSettingsOpen(settings?.hidden !== false);
+  });
+
+  document.addEventListener('click', (event) => {
+    const target = event.target as HTMLElement;
+    // "Load map" on a placeholder is an explicit consent for external media.
+    if (target.closest('[data-consent-load]')) choose(true);
+    // Footer link: withdrawing consent must be as easy as giving it.
+    if (target.closest('[data-cookie-reopen]')) {
+      event.preventDefault();
+      show({ withSettings: true });
+    }
+  });
+
+  const stored = readConsent();
+  applyConsent(stored);
+  if (!stored) show();
+</script>

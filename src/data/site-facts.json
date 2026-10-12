@@ -1,0 +1,51 @@
+{
+  "_comment": "Client facts — the only place for name, contacts, address, numbers and site switches. Unknown value = [ЗАПОЛНИТЬ] or null (hidden on the site). Only facts confirmed by the client; note what was confirmed and when in _confirm.",
+  "_confirm": "[ЗАПОЛНИТЬ] who confirmed which facts and when",
+
+  "name": "[ЗАПОЛНИТЬ] Bedrijfsnaam",
+  "legalName": "[ЗАПОЛНИТЬ] Bedrijfsnaam BV",
+  "vat": null,
+  "owner": null,
+  "foundedYear": null,
+
+  "phone": "[ЗАПОЛНИТЬ] 04xx xx xx xx",
+  "phoneE164": "[ЗАПОЛНИТЬ]",
+  "whatsappE164": null,
+  "email": "[ЗАПОЛНИТЬ]@example.com",
+
+  "address": {
+    "street": "[ЗАПОЛНИТЬ] Straat 1",
+    "postalCode": "[ЗАПОЛНИТЬ]",
+    "city": "[ЗАПОЛНИТЬ] Gemeente",
+    "region": "[ЗАПОЛНИТЬ] Provincie",
+    "country": "BE"
+  },
+  "showAddress": true,
+
+  "openingHours": [],
+  "responseTime": "[ЗАПОЛНИТЬ] Antwoord binnen 1 werkdag",
+
+  "stats": [],
+  "reviews": {
+    "score": null,
+    "count": null,
+    "googleUrl": null
+  },
+  "social": {
+    "facebook": null,
+    "instagram": null,
+    "tiktok": null
+  },
+
+  "logo": null,
+  "style": "strict",
+  "brand": {
+    "primary": null,
+    "ink": null
+  },
+
+  "languages": ["nl"],
+  "siteUrl": "https://example.com",
+  "launched": false,
+  "demo": true
+}

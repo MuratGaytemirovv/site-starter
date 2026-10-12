@@ -1,0 +1,56 @@
+---
+// Recent work. Fixed row height + object-cover so every cell is filled; when
+// the item count does not fill the last row, the first items span two columns
+// (a grid must fill evenly — no holes).
+import Section from '../Section.astro';
+import SectionHeading from '../SectionHeading.astro';
+import Img from '../Img.astro';
+import type { Content } from '../../lib/schema';
+import type { Tone } from '../../lib/sections';
+import type { UI } from '../../i18n/ui';
+
+interface Props {
+  t: UI;
+  content: Content['gallery'];
+  items: { title: string; image: string | null; imageAlt: string }[];
+  tone: Tone;
+}
+const { t, content, items, tone } = Astro.props;
+
+const n = items.length;
+const lgCols = Math.min(n, 3);
+const lgExtra = lgCols === 3 ? (3 - (n % 3)) % 3 : 0;
+const smOdd = n % 2 === 1 && n > 1;
+function cellClass(i: number) {
+  const sm = smOdd && i === 0;
+  const lg = i < lgExtra;
+  return [sm && 'sm:col-span-2', lg ? 'lg:col-span-2' : sm && 'lg:col-span-1'];
+}
+const gridCols: Record<number, string> = { 1: 'lg:grid-cols-1', 2: 'lg:grid-cols-2', 3: 'lg:grid-cols-3' };
+---
+
+<Section id={t.sections.gallery.anchor} tone={tone}>
+  <SectionHeading eyebrow={content.eyebrow} title={content.title} intro={content.intro || undefined} align="split" />
+  <ul
+    class:list={['grid auto-rows-[240px] grid-cols-1 gap-4 sm:grid-cols-2 lg:auto-rows-[280px] lg:gap-6', gridCols[lgCols]]}
+    data-reveal-group
+  >
+    {
+      items.map((item, i) => (
+        <li class:list={['group relative overflow-hidden rounded-card', ...cellClass(i)]} data-reveal>
+          <Img
+            src={item.image}
+            alt={item.imageAlt}
+            fill
+            widths={[480, 720, 960, 1400]}
+            sizes={i < lgExtra ? '(min-width: 1024px) 66vw, 100vw' : '(min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw'}
+            class="transition-transform duration-500 group-hover:scale-[1.04]"
+          />
+          <div class="pointer-events-none absolute inset-x-0 bottom-0 bg-linear-to-t from-ink/85 to-transparent px-5 pb-4 pt-12">
+            <p class="text-[16px] font-semibold text-on-ink">{item.title}</p>
+          </div>
+        </li>
+      ))
+    }
+  </ul>
+</Section>

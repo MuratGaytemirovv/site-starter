@@ -1,0 +1,35 @@
+---
+// Bottom bar on phones: Call · WhatsApp · Quote — the main source of leads
+// from mobile. Links are "/#contact" so they work on every page.
+import Icon from '../Icon.astro';
+import { links } from '../../lib/site';
+import type { SectionId } from '../../lib/schema';
+import type { UI } from '../../i18n/ui';
+
+interface Props {
+  t: UI;
+  sections: SectionId[];
+}
+const { t, sections } = Astro.props;
+const cell = 'flex flex-1 items-center justify-center gap-2 text-[15px] font-bold';
+---
+
+<div class="fixed inset-x-0 bottom-0 z-40 flex h-16 border-t border-line bg-bg shadow-[0_-6px_18px_rgb(0_0_0/0.08)] nav:hidden">
+  <a href={links.tel} class:list={[cell, 'border-r border-line text-heading']}>
+    <Icon name="phone" class="h-[18px] w-[18px] text-primary-text" />{t.cta.call}
+  </a>
+  {
+    links.whatsapp && (
+      <a href={links.whatsapp} target="_blank" rel="noopener" class:list={[cell, 'border-r border-line text-heading']}>
+        <Icon name="whatsapp" class="h-[18px] w-[18px] text-primary-text" />{t.cta.whatsapp}
+      </a>
+    )
+  }
+  {
+    sections.includes('contact') && (
+      <a href={`/#${t.sections.contact.anchor}`} class:list={[cell, 'flex-[1.3] bg-primary px-2 text-center leading-tight text-on-primary']}>
+        {t.cta.quote}
+      </a>
+    )
+  }
+</div>

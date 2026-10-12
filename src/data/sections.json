@@ -1,0 +1,16 @@
+{
+  "_comment": "Homepage sections in display order. enabled:false hides a section (and its menu link). A section with no data (no reviews, no gallery items…) is hidden automatically. variant is optional; without it the style default is used.",
+  "topbar": true,
+  "sections": [
+    { "id": "hero", "enabled": true, "variant": null },
+    { "id": "trust", "enabled": true },
+    { "id": "services", "enabled": true },
+    { "id": "about", "enabled": true },
+    { "id": "process", "enabled": true },
+    { "id": "gallery", "enabled": true },
+    { "id": "why-us", "enabled": true },
+    { "id": "reviews", "enabled": true },
+    { "id": "faq", "enabled": true },
+    { "id": "contact", "enabled": true }
+  ]
+}

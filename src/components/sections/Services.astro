@@ -1,0 +1,58 @@
+---
+// Service cards → each opens its own page (/slug). Photo when there is one,
+// otherwise the card leads with the icon only (no grey boxes on a demo).
+import Section from '../Section.astro';
+import SectionHeading from '../SectionHeading.astro';
+import Icon from '../Icon.astro';
+import Img from '../Img.astro';
+import type { Content } from '../../lib/schema';
+import type { Service } from '../../lib/collections';
+import type { Tone } from '../../lib/sections';
+import type { UI } from '../../i18n/ui';
+
+interface Props {
+  t: UI;
+  content: Content['services'];
+  services: Service[];
+  tone: Tone;
+}
+const { t, content, services, tone } = Astro.props;
+const withPhotos = services.some((s) => s.image);
+const cols = services.length % 3 === 0 || services.length > 4 ? 'lg:grid-cols-3' : 'lg:grid-cols-2';
+const card = tone === 'alt' ? 'bg-bg' : 'bg-surface';
+---
+
+<Section id={t.sections.services.anchor} tone={tone}>
+  <SectionHeading eyebrow={content.eyebrow} title={content.title} intro={content.intro} align="split" />
+  <div class:list={['grid grid-cols-1 gap-5 sm:grid-cols-2 lg:gap-7', cols]} data-reveal-group>
+    {
+      services.map((s) => (
+        <a
+          href={`/${s.slug}`}
+          data-reveal
+          class:list={[
+            'group flex flex-col overflow-hidden rounded-card border border-line transition-[translate,box-shadow,border-color] duration-200 hover:-translate-y-1 hover:border-primary hover:shadow-[0_18px_36px_-18px_rgb(0_0_0/0.25)]',
+            card,
+          ]}
+        >
+          {withPhotos && (
+            <div class="overflow-hidden">
+              <Img src={s.image} alt={s.imageAlt} icon={s.icon} widths={[480, 720, 900]} sizes="(min-width: 1024px) 380px, (min-width: 640px) 50vw, 100vw" class="transition-transform duration-500 group-hover:scale-[1.04]" />
+            </div>
+          )}
+          <div class="flex flex-1 flex-col gap-3 p-6 lg:p-7">
+            <span class="flex h-12 w-12 items-center justify-center rounded-card bg-primary text-on-primary transition-transform duration-300 group-hover:-rotate-6">
+              <Icon name={s.icon} class="h-6 w-6" />
+            </span>
+            <h3 class="mt-1 text-[20px] leading-snug lg:text-[22px]">{s.title}</h3>
+            <p class="text-[15px] leading-relaxed text-muted">{s.summary}</p>
+            <span class="mt-auto flex items-center gap-1.5 pt-2 text-[15px] font-semibold text-primary-text">
+              {t.cta.more}
+              <Icon name="arrow-right" class="h-4 w-4 transition-transform duration-200 group-hover:translate-x-1" />
+            </span>
+          </div>
+        </a>
+      ))
+    }
+  </div>
+</Section>

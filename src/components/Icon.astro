@@ -1,0 +1,53 @@
+---
+// Any Lucide icon by name (https://lucide.dev/icons, e.g. "hammer",
+// "paint-roller", "scissors"), a few brand glyphs Lucide does not ship, or
+// "custom:<file>" for an SVG in src/assets/icons/. Inline SVG, rendered at
+// build time — no icon font, no runtime JS. An unknown name fails the build.
+import * as lucide from 'lucide-static';
+import { siFacebook, siInstagram, siTiktok, siWhatsapp } from 'simple-icons';
+import { customIcon } from '../lib/images';
+
+interface Props {
+  name: string;
+  class?: string;
+}
+
+const { name, class: className = 'h-6 w-6' } = Astro.props;
+
+// Brand glyphs Lucide does not ship (simple-icons, CC0), drawn filled.
+const brandIcons: Record<string, { path: string }> = {
+  whatsapp: siWhatsapp,
+  facebook: siFacebook,
+  instagram: siInstagram,
+  tiktok: siTiktok,
+};
+const brands = Object.fromEntries(
+  Object.entries(brandIcons).map(([k, v]) => [k, `<path fill="currentColor" stroke="none" d="${v.path}"/>`]),
+);
+
+const pascal = (s: string) => s.replace(/(^|-)([a-z0-9])/g, (_, __, c: string) => c.toUpperCase());
+const inner = (svg: string) => svg.slice(svg.indexOf('>', svg.indexOf('<svg')) + 1, svg.lastIndexOf('</svg>')).trim();
+
+let body: string;
+if (name.startsWith('custom:')) {
+  body = inner(customIcon(name.slice(7)));
+} else if (brands[name]) {
+  body = brands[name];
+} else {
+  const svg = (lucide as Record<string, string>)[pascal(name)];
+  if (!svg) throw new Error(`Unknown icon "${name}" — use a Lucide name from lucide.dev/icons or "custom:<file>"`);
+  body = inner(svg);
+}
+---
+
+<svg
+  class={className}
+  viewBox="0 0 24 24"
+  fill="none"
+  stroke="currentColor"
+  stroke-width="1.75"
+  stroke-linecap="round"
+  stroke-linejoin="round"
+  aria-hidden="true"
+  set:html={body}
+/>

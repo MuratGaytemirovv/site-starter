@@ -1,0 +1,46 @@
+---
+// Eyebrow + heading (+ optional intro) used by every homepage section.
+interface Props {
+  eyebrow?: string;
+  title: string;
+  intro?: string;
+  tone?: 'light' | 'dark';
+  align?: 'start' | 'split';
+  class?: string;
+}
+
+const { eyebrow, title, intro, tone = 'light', align = 'start', class: className = '' } = Astro.props;
+const dark = tone === 'dark';
+---
+
+<div
+  class:list={[
+    'flex flex-col gap-4 pb-10 lg:pb-14',
+    align === 'split' && intro && 'lg:flex-row lg:items-end lg:justify-between lg:gap-12',
+    className,
+  ]}
+  data-reveal
+>
+  <div class="max-w-2xl">
+    {
+      eyebrow && (
+        <p
+          class:list={[
+            'font-heading text-[13px] font-semibold uppercase tracking-[0.14em]',
+            dark ? 'text-primary-on-ink' : 'text-primary-text',
+          ]}
+        >
+          {eyebrow}
+        </p>
+      )
+    }
+    <h2 class:list={['mt-3 text-[30px] leading-[1.15] lg:text-[42px]', dark && 'text-on-ink']}>{title}</h2>
+  </div>
+  {
+    intro && (
+      <p class:list={['max-w-md text-[17px] leading-relaxed lg:text-[18px]', dark ? 'text-on-ink-muted' : 'text-muted']}>
+        {intro}
+      </p>
+    )
+  }
+</div>

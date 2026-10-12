@@ -1,0 +1,165 @@
+@import "tailwindcss";
+
+/* Fonts of all three styles, self-hosted. Browsers only download a font that
+   is actually used on the page, so unused styles cost a few @font-face rules. */
+@import "@fontsource-variable/inter";
+@import "@fontsource-variable/manrope";
+@import "@fontsource-variable/lora";
+@import "@fontsource-variable/nunito-sans";
+@import "@fontsource-variable/onest";
+
+/* Design tokens. Values come from src/lib/theme.ts (style preset + client
+   brand colours) as --t-* variables on :root — change them there, not here.
+   This block only gives them Tailwind names: bg-primary, text-muted,
+   rounded-card, font-heading, py-section … */
+@theme {
+  --color-primary: var(--t-primary);
+  --color-primary-hover: var(--t-primary-hover);
+  --color-on-primary: var(--t-on-primary);
+  --color-primary-text: var(--t-primary-text);
+  --color-primary-on-ink: var(--t-primary-on-ink);
+  --color-primary-soft: var(--t-primary-soft);
+  --color-ink: var(--t-ink);
+  --color-ink-soft: var(--t-ink-soft);
+  --color-on-ink: var(--t-on-ink);
+  --color-on-ink-muted: var(--t-on-ink-muted);
+  --color-ink-line: var(--t-ink-line);
+  --color-bg: var(--t-bg);
+  --color-surface: var(--t-surface);
+  --color-text: var(--t-text);
+  --color-heading: var(--t-heading);
+  --color-muted: var(--t-muted);
+  --color-line: var(--t-line);
+
+  --font-heading: var(--t-font-heading);
+  --font-body: var(--t-font-body);
+
+  --radius-card: var(--t-radius-card);
+  --radius-button: var(--t-radius-button);
+
+  --spacing-gutter: 1.25rem;
+  --spacing-gutter-lg: 3rem;
+  --spacing-section: var(--t-section-y);
+  --spacing-section-lg: var(--t-section-y-lg);
+
+  /* Header switches to the mobile menu below this width. In rem like the
+     built-in breakpoints: with mixed units Tailwind v4 sorts nav: rules before
+     sm:, and sm: then overrides them. */
+  --breakpoint-nav: 60rem;
+}
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+    -webkit-text-size-adjust: 100%;
+  }
+
+  body {
+    font-family: var(--font-body);
+    color: var(--color-text);
+    background-color: var(--color-bg);
+  }
+
+  h1,
+  h2,
+  h3,
+  h4 {
+    font-family: var(--font-heading);
+    font-weight: var(--t-heading-weight);
+    letter-spacing: var(--t-heading-tracking);
+    color: var(--color-heading);
+    text-wrap: balance;
+    /* Long Dutch compounds must wrap instead of causing sideways scroll on 320px. */
+    overflow-wrap: break-word;
+    hyphens: auto;
+  }
+
+  :focus-visible {
+    outline: 3px solid var(--color-primary);
+    outline-offset: 3px;
+  }
+
+  ::selection {
+    background-color: var(--color-primary);
+    color: var(--color-on-primary);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    html {
+      scroll-behavior: auto;
+    }
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+    }
+  }
+}
+
+/* ===== Scroll reveal =====
+   Deliberately outside @layer: it must win over utilities while the reveal
+   runs. `.js-anim` is set synchronously in <head>; without JS nothing is ever
+   hidden. scripts/reveal.ts adds .is-revealed when an element approaches the
+   viewport and removes data-reveal after the transition, so hover transforms
+   on cards work normally afterwards. Stagger inside [data-reveal-group] comes
+   from :nth-child, not from JS. */
+.js-anim [data-reveal] {
+  opacity: 0;
+  transform: translateY(20px);
+  transition: opacity 550ms ease-out, transform 550ms ease-out;
+}
+.js-anim [data-reveal-group] > [data-reveal]:nth-child(2) { transition-delay: 70ms; }
+.js-anim [data-reveal-group] > [data-reveal]:nth-child(3) { transition-delay: 140ms; }
+.js-anim [data-reveal-group] > [data-reveal]:nth-child(4) { transition-delay: 210ms; }
+.js-anim [data-reveal-group] > [data-reveal]:nth-child(5) { transition-delay: 280ms; }
+.js-anim [data-reveal-group] > [data-reveal]:nth-child(6) { transition-delay: 350ms; }
+.js-anim [data-reveal-group] > [data-reveal]:nth-child(n + 7) { transition-delay: 420ms; }
+.js-anim [data-reveal].is-revealed {
+  opacity: 1;
+  transform: none;
+}
+@media (prefers-reduced-motion: reduce) {
+  .js-anim [data-reveal] {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+/* ===== Sticky header: same height always, only a shadow on scroll =====
+   Changing the height of a sticky header makes scroll anchoring jump back
+   (INGBELG lesson). */
+.site-header.is-scrolled {
+  box-shadow: 0 6px 24px rgb(0 0 0 / 0.08);
+}
+
+/* ===== Mobile menu: CSS-only toggle, page behind it does not scroll ===== */
+body:has(#nav-toggle:checked) {
+  overflow: hidden;
+}
+
+/* ===== FAQ: smooth open where supported, instant elsewhere ===== */
+@supports (interpolate-size: allow-keywords) {
+  .faq details {
+    interpolate-size: allow-keywords;
+  }
+  .faq details::details-content {
+    height: 0;
+    overflow: hidden;
+    transition: height 280ms ease, content-visibility 280ms allow-discrete;
+  }
+  .faq details[open]::details-content {
+    height: auto;
+  }
+}
+
+/* ===== Image placeholder pattern (no client photo yet) ===== */
+.placeholder-pattern {
+  background-color: var(--color-primary-soft);
+  background-image: repeating-linear-gradient(
+    135deg,
+    transparent 0 14px,
+    color-mix(in srgb, var(--color-primary) 7%, transparent) 14px 15px
+  );
+}

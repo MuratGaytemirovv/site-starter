@@ -1,0 +1,31 @@
+---
+// Client logo from site-facts.json (`logo`: path in src/assets/images/), or the
+// company name set in the heading font while there is no logo file.
+import { Image } from 'astro:assets';
+import { facts } from '../lib/site';
+import { resolveImage } from '../lib/images';
+
+interface Props {
+  tone?: 'light' | 'dark';
+  class?: string;
+}
+
+const { tone = 'light', class: className = '' } = Astro.props;
+const logo = resolveImage(facts.logo);
+---
+
+{
+  logo ? (
+    <Image src={logo} alt={facts.name} height={44} class:list={['h-9 w-auto shrink-0 lg:h-11', className]} loading="eager" />
+  ) : (
+    <span
+      class:list={[
+        'line-clamp-2 font-heading text-[18px] font-extrabold leading-tight tracking-[-0.01em] lg:text-[21px]',
+        tone === 'dark' ? 'text-on-ink' : 'text-heading',
+        className,
+      ]}
+    >
+      {facts.name}
+    </span>
+  )
+}

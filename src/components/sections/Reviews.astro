@@ -1,0 +1,65 @@
+---
+// Real reviews only, word for word, with the source. The summary (score)
+// comes from site-facts and links to the Google profile. No AggregateRating
+// schema from our own site (risk of a Google penalty).
+import Section from '../Section.astro';
+import SectionHeading from '../SectionHeading.astro';
+import Icon from '../Icon.astro';
+import { facts } from '../../lib/site';
+import type { Content } from '../../lib/schema';
+import type { Tone } from '../../lib/sections';
+import type { UI } from '../../i18n/ui';
+
+interface Props {
+  t: UI;
+  content: Content['reviews'];
+  reviews: { author: string; text: string; rating: number; source: string; date: string | null }[];
+  tone: Tone;
+}
+const { t, content, reviews, tone } = Astro.props;
+const card = tone === 'alt' ? 'bg-bg' : 'bg-surface';
+const grid = reviews.length % 3 === 0 ? 'lg:grid-cols-3' : 'lg:grid-cols-2';
+---
+
+<Section id={t.sections.reviews.anchor} tone={tone}>
+  <div class="flex flex-col lg:flex-row lg:items-end lg:justify-between lg:gap-8">
+    <SectionHeading eyebrow={content.eyebrow} title={content.title} />
+    {
+      facts.reviews.score && facts.reviews.googleUrl && (
+        <a
+          href={facts.reviews.googleUrl}
+          target="_blank"
+          rel="noopener"
+          class:list={['mb-10 flex items-center gap-4 self-start rounded-card px-5 py-4 transition-transform hover:-translate-y-0.5 lg:mb-14 lg:self-auto', card]}
+        >
+          <span class="font-heading text-[34px] font-extrabold text-heading">{facts.reviews.score}</span>
+          <span>
+            <span class="flex gap-0.5 text-primary-text">
+              {Array.from({ length: 5 }, () => <Icon name="star" class="h-4 w-4 fill-current" />)}
+            </span>
+            <span class="mt-1 block text-[13px] text-muted">{t.reviews.onGoogle}</span>
+          </span>
+        </a>
+      )
+    }
+  </div>
+  <ul class:list={['grid grid-cols-1 gap-5 sm:grid-cols-2 lg:gap-7', grid]} data-reveal-group>
+    {
+      reviews.map((r) => (
+        <li class:list={['flex flex-col gap-4 rounded-card p-6 lg:p-8', card]} data-reveal>
+          <span class="flex gap-0.5 text-primary-text" role="img" aria-label={t.reviews.stars(r.rating)}>
+            {Array.from({ length: r.rating }, () => <Icon name="star" class="h-[18px] w-[18px] fill-current" />)}
+          </span>
+          <blockquote class="text-[16px] leading-relaxed lg:text-[17px]">“{r.text}”</blockquote>
+          <p class="mt-auto pt-2 text-[14px]">
+            <span class="block font-semibold text-heading">{r.author}</span>
+            <span class="text-muted">
+              {t.reviews.source(r.source)}
+              {r.date && ` · ${r.date}`}
+            </span>
+          </p>
+        </li>
+      ))
+    }
+  </ul>
+</Section>

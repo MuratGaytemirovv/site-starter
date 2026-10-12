@@ -1,0 +1,43 @@
+---
+// One button style for the whole site. No global nowrap: long labels must
+// wrap on a 320px phone instead of overflowing (INGBELG lesson).
+import Icon from './Icon.astro';
+
+interface Props {
+  href: string;
+  variant?: 'primary' | 'outline' | 'outline-light' | 'ghost';
+  size?: 'md' | 'lg';
+  icon?: string;
+  iconEnd?: string;
+  class?: string;
+  [attr: string]: unknown;
+}
+
+const { href, variant = 'primary', size = 'md', icon, iconEnd, class: className = '', ...rest } = Astro.props;
+
+const variants = {
+  primary: 'bg-primary text-on-primary hover:bg-primary-hover shadow-[0_8px_20px_-8px_var(--color-primary)]',
+  outline: 'border-[1.5px] border-heading text-heading hover:bg-heading hover:text-bg',
+  'outline-light': 'border-[1.5px] border-on-ink/70 text-on-ink hover:bg-on-ink hover:text-ink',
+  ghost: 'text-heading hover:bg-surface',
+};
+const sizes = {
+  md: 'min-h-12 px-5 py-3 text-[15px]',
+  lg: 'min-h-14 px-7 py-4 text-[16px]',
+};
+---
+
+<a
+  href={href}
+  class:list={[
+    'group inline-flex items-center justify-center gap-2 rounded-button text-center font-bold leading-tight transition-[background-color,color,border-color,translate,box-shadow] duration-200 hover:-translate-y-0.5 active:translate-y-0',
+    variants[variant],
+    sizes[size],
+    className,
+  ]}
+  {...rest}
+>
+  {icon && <Icon name={icon} class="h-[18px] w-[18px] shrink-0" />}
+  <slot />
+  {iconEnd && <Icon name={iconEnd} class="h-[18px] w-[18px] shrink-0 transition-transform duration-200 group-hover:translate-x-0.5" />}
+</a>

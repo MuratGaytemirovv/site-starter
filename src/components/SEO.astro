@@ -1,0 +1,32 @@
+---
+// Meta tags. Until `launched: true` in site-facts.json every page is noindex
+// (preview domains also get X-Robots-Tag from vercel.json).
+import { facts } from '../lib/site';
+import type { UI } from '../i18n/ui';
+
+interface Props {
+  title: string;
+  description: string;
+  image?: string;
+  noindex?: boolean;
+  t: UI;
+}
+
+const { title, description, image, noindex = false, t } = Astro.props;
+const canonical = new URL(Astro.url.pathname, Astro.site);
+const ogImage = image ? new URL(image, Astro.site) : null;
+---
+
+<title>{title}</title>
+<meta name="description" content={description} />
+<link rel="canonical" href={canonical} />
+{(noindex || !facts.launched) && <meta name="robots" content="noindex, nofollow" />}
+
+<meta property="og:type" content="website" />
+<meta property="og:title" content={title} />
+<meta property="og:description" content={description} />
+<meta property="og:url" content={canonical} />
+<meta property="og:locale" content={t.ogLocale} />
+<meta property="og:site_name" content={facts.name} />
+{ogImage && <meta property="og:image" content={ogImage} />}
+<meta name="twitter:card" content={ogImage ? 'summary_large_image' : 'summary'} />

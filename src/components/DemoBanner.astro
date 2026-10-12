@@ -1,0 +1,19 @@
+---
+// Shown while `demo: true`: a preview built from public information must say
+// so — the facts are not confirmed by the business yet.
+import { facts } from '../lib/site';
+import type { UI } from '../i18n/ui';
+
+interface Props {
+  t: UI;
+}
+const { t } = Astro.props;
+---
+
+{
+  facts.demo && (
+    <div class="bg-ink px-gutter py-2 text-center text-[13px] font-medium text-on-ink">
+      {t.demoNotice}
+    </div>
+  )
+}
