@@ -27,7 +27,8 @@ const time = z.string().regex(/^\d{2}:\d{2}$/, 'expected HH:MM');
 
 export const factsSchema = z.object({
   name: z.string().min(1),
-  legalName: z.string().min(1),
+  // null = not confirmed yet; the trade name is shown instead (required at launch).
+  legalName: z.string().min(1).nullable(),
   vat: z.string().nullable(),
   owner: z.string().nullable(),
   foundedYear: z.number().int().nullable(),
@@ -35,7 +36,8 @@ export const factsSchema = z.object({
   phone: z.string().min(1),
   phoneE164: z.string().min(1),
   whatsappE164: z.string().nullable(),
-  email: z.string().min(1),
+  // null = no public e-mail: only the phone is shown (required at launch).
+  email: z.string().min(1).nullable(),
 
   address: z.object({
     street: z.string(),

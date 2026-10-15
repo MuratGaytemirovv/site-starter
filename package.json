@@ -5,8 +5,12 @@
   "private": true,
   "scripts": {
     "dev": "astro dev",
+    "predev": "node --experimental-strip-types --no-warnings scripts/apply-client.ts --auto",
     "build": "astro check && astro build",
+    "prebuild": "node --experimental-strip-types --no-warnings scripts/client-schema.ts && node --experimental-strip-types --no-warnings scripts/apply-client.ts --auto && node --experimental-strip-types --no-warnings scripts/check-placeholders.ts",
     "check": "astro check",
+    "apply-client": "node --experimental-strip-types --no-warnings scripts/apply-client.ts",
+    "new-site": "node --experimental-strip-types --no-warnings scripts/new-site.ts",
     "astro": "astro"
   },
   "dependencies": {
@@ -24,5 +28,11 @@
     "simple-icons": "^16.35.0",
     "tailwindcss": "^4.3.3",
     "typescript": "^6.0.3"
+  },
+  "devDependencies": {
+    "@types/node": "^22.20.5"
+  },
+  "engines": {
+    "node": ">=22.6"
   }
 }

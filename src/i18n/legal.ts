@@ -21,9 +21,11 @@ type Proc = Facts['privacy']['processors'][number];
 const has = (c: LegalContext, p: Proc) => c.facts.privacy.processors.includes(p);
 const be = (c: LegalContext) => c.facts.address.country === 'BE';
 const controller = (c: LegalContext, vatLabel: string) =>
-  [c.facts.legalName, c.facts.showAddress ? c.address : null, c.facts.vat ? `${vatLabel} ${c.facts.vat}` : null, `${c.facts.email} · ${c.facts.phone}`]
+  [c.facts.legalName ?? c.facts.name, c.facts.showAddress ? c.address : null, c.facts.vat ? `${vatLabel} ${c.facts.vat}` : null, [c.facts.email, c.facts.phone].filter(Boolean).join(' · ')]
     .filter(Boolean)
     .join(' — ');
+// Where to send a privacy request: e-mail, or the phone while there is none (demo).
+const reach = (c: LegalContext) => c.facts.email ?? c.facts.phone;
 const only = <T,>(cond: boolean, items: T[]) => (cond ? items : []);
 
 const nl = {
@@ -79,7 +81,7 @@ const nl = {
             'bezwaar maken tegen verwerking op basis van ons gerechtvaardigd belang;',
             'uw toestemming op elk moment intrekken.',
           ],
-          p: [`Stuur uw verzoek naar ${c.facts.email}. We antwoorden binnen een maand.`],
+          p: [`Stuur uw verzoek naar ${reach(c)}. We antwoorden binnen een maand.`],
         },
         {
           h: '8. Klacht indienen',
@@ -103,7 +105,7 @@ const nl = {
         ]),
         { h: 'Geen statistieken of advertenties', p: ['We gebruiken geen analytische cookies en geen advertentiecookies.'] },
         { h: 'Uw keuze wijzigen', p: ['Via de link Cookie-instellingen onderaan elke pagina kan u uw keuze altijd aanpassen of intrekken. U kan cookies en lokale opslag ook wissen in de instellingen van uw browser.'] },
-        { h: 'Meer weten', p: [`Hoe we met persoonsgegevens omgaan, leest u in ons privacybeleid (${c.privacyHref}). Vragen? Mail naar ${c.facts.email}.`] },
+        { h: 'Meer weten', p: [`Hoe we met persoonsgegevens omgaan, leest u in ons privacybeleid (${c.privacyHref}). Vragen? Mail naar ${reach(c)}.`] },
       ],
     };
   },
@@ -162,7 +164,7 @@ const fr: typeof nl = {
             'vous opposer au traitement fondé sur notre intérêt légitime ;',
             'retirer votre consentement à tout moment.',
           ],
-          p: [`Envoyez votre demande à ${c.facts.email}. Nous répondons dans un délai d’un mois.`],
+          p: [`Envoyez votre demande à ${reach(c)}. Nous répondons dans un délai d’un mois.`],
         },
         {
           h: '8. Introduire une plainte',
@@ -186,7 +188,7 @@ const fr: typeof nl = {
         ]),
         { h: 'Ni statistiques ni publicité', p: ['Nous n’utilisons ni cookies analytiques ni cookies publicitaires.'] },
         { h: 'Modifier votre choix', p: ['Le lien Paramètres des cookies en bas de chaque page vous permet de modifier ou retirer votre choix à tout moment. Vous pouvez aussi effacer les cookies et le stockage local dans les réglages de votre navigateur.'] },
-        { h: 'En savoir plus', p: [`Notre traitement des données personnelles est décrit dans notre politique de confidentialité (${c.privacyHref}). Des questions ? Écrivez à ${c.facts.email}.`] },
+        { h: 'En savoir plus', p: [`Notre traitement des données personnelles est décrit dans notre politique de confidentialité (${c.privacyHref}). Des questions ? Écrivez à ${reach(c)}.`] },
       ],
     };
   },
@@ -245,7 +247,7 @@ const en: typeof nl = {
             'object to processing based on our legitimate interest;',
             'withdraw your consent at any time.',
           ],
-          p: [`Send your request to ${c.facts.email}. We reply within one month.`],
+          p: [`Send your request to ${reach(c)}. We reply within one month.`],
         },
         {
           h: '8. Complaints',
@@ -269,7 +271,7 @@ const en: typeof nl = {
         ]),
         { h: 'No statistics or advertising', p: ['We use no analytics cookies and no advertising cookies.'] },
         { h: 'Changing your choice', p: ['Use the Cookie settings link at the bottom of every page to change or withdraw your choice at any time. You can also clear cookies and local storage in your browser settings.'] },
-        { h: 'More information', p: [`How we handle personal data is described in our privacy policy (${c.privacyHref}). Questions? E-mail ${c.facts.email}.`] },
+        { h: 'More information', p: [`How we handle personal data is described in our privacy policy (${c.privacyHref}). Questions? E-mail ${reach(c)}.`] },
       ],
     };
   },
@@ -328,7 +330,7 @@ const ru: typeof nl = {
             'возразить против обработки на основании нашего законного интереса;',
             'отозвать согласие в любой момент.',
           ],
-          p: [`Напишите нам на ${c.facts.email}. Мы ответим в течение месяца.`],
+          p: [`Напишите нам на ${reach(c)}. Мы ответим в течение месяца.`],
         },
         {
           h: '8. Жалоба',
@@ -352,7 +354,7 @@ const ru: typeof nl = {
         ]),
         { h: 'Без статистики и рекламы', p: ['Мы не используем аналитические и рекламные cookie.'] },
         { h: 'Как изменить выбор', p: ['Ссылка «Настройки cookie» внизу каждой страницы позволяет в любой момент изменить или отозвать выбор. Cookie и локальное хранилище также можно удалить в настройках браузера.'] },
-        { h: 'Подробнее', p: [`Как мы обращаемся с персональными данными, описано в политике конфиденциальности (${c.privacyHref}). Вопросы — на ${c.facts.email}.`] },
+        { h: 'Подробнее', p: [`Как мы обращаемся с персональными данными, описано в политике конфиденциальности (${c.privacyHref}). Вопросы — на ${reach(c)}.`] },
       ],
     };
   },

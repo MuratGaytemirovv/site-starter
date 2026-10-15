@@ -1,0 +1,165 @@
+{
+  "$schema": "../client.schema.json",
+  "demo": true,
+  "launched": false,
+  "sources": [
+    { "what": "alle gegevens", "from": "Voorbeeld van het formaat — fictief bedrijf, geen echte feiten", "date": "2026-10-15" }
+  ],
+
+  "facts": {
+    "name": "Dakwerken Voorbeeld",
+    "legalName": null,
+    "vat": null,
+    "owner": null,
+    "foundedYear": null,
+    "phone": "0470 00 00 00",
+    "whatsappE164": null,
+    "email": null,
+    "address": { "street": null, "postalCode": "9000", "city": "Gent", "region": "Oost-Vlaanderen", "country": "BE" },
+    "showAddress": false,
+    "openingHours": [
+      { "days": ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"], "opens": "07:30", "closes": "17:00" }
+    ],
+    "schemaType": "RoofingContractor"
+  },
+
+  "design": { "style": "warm", "primary": "#b4531f", "heroVariant": "split" },
+  "languages": ["nl", "fr"],
+  "sections": ["hero", "trust", "services", "about", "process", "why-us", "reviews", "faq", "contact"],
+
+  "home": {
+    "nl": {
+      "meta": {
+        "title": "Dakwerker in Gent — Dakwerken Voorbeeld",
+        "description": "Platte en hellende daken, herstellingen en dakgoten in Gent en omgeving. Vraag vrijblijvend een offerte aan."
+      },
+      "hero": {
+        "eyebrow": "Gent · Oost-Vlaanderen",
+        "title": "Dakwerken in Gent",
+        "titleAccent": "nieuw, hersteld of geïsoleerd",
+        "subtitle": "Voor particulieren en kleine bedrijven: van een lekkende goot tot een volledig nieuw dak.",
+        "bullets": ["Vrijblijvende offerte", "Werken in Gent en omgeving"]
+      },
+      "trust": {
+        "items": [
+          { "icon": "file-text", "label": "Vrijblijvende offerte" },
+          { "icon": "map-pin", "label": "Gent en omgeving" }
+        ]
+      },
+      "services": { "intro": "Wat we voor uw dak kunnen doen." },
+      "about": {
+        "paragraphs": [
+          "Dakwerken Voorbeeld is een fictief bedrijf: dit bestand toont alleen het formaat van client.json.",
+          "Bij een echte klant staat hier wie achter het bedrijf zit, sinds wanneer en in welke regio."
+        ]
+      },
+      "process": {
+        "steps": [
+          { "title": "Aanvraag", "text": "U belt of vult het formulier in." },
+          { "title": "Bezoek", "text": "We bekijken het dak ter plaatse." },
+          { "title": "Offerte", "text": "U krijgt een duidelijke prijs per post." },
+          { "title": "Uitvoering", "text": "We voeren de werken uit zoals afgesproken." }
+        ]
+      },
+      "whyUs": {
+        "items": [
+          { "icon": "user-check", "title": "Eén aanspreekpunt", "text": "Dezelfde persoon van offerte tot oplevering." },
+          { "icon": "receipt", "title": "Heldere offerte", "text": "Elke post apart, zonder verrassingen achteraf." }
+        ]
+      },
+      "faq": {
+        "items": [
+          { "q": "In welke regio werkt u?", "a": "In Gent en de omliggende gemeenten." },
+          { "q": "Is een offerte gratis?", "a": "Ja, de offerte is vrijblijvend." }
+        ]
+      },
+      "contact": { "text": "Beschrijf kort uw dak of het probleem. We bellen u terug om een bezoek af te spreken." },
+      "footer": { "tagline": "Dakwerken in Gent en omgeving." }
+    },
+    "fr": {
+      "meta": {
+        "title": "Couvreur à Gand — Dakwerken Voorbeeld",
+        "description": "Toits plats et inclinés, réparations et gouttières à Gand et environs. Demandez un devis sans engagement."
+      },
+      "hero": {
+        "eyebrow": "Gand · Flandre-Orientale",
+        "title": "Travaux de toiture à Gand",
+        "titleAccent": "neuf, réparé ou isolé",
+        "subtitle": "Pour particuliers et petites entreprises : de la gouttière qui fuit au toit entièrement neuf.",
+        "bullets": ["Devis sans engagement", "À Gand et environs"]
+      },
+      "trust": {
+        "items": [
+          { "icon": "file-text", "label": "Devis sans engagement" },
+          { "icon": "map-pin", "label": "Gand et environs" }
+        ]
+      },
+      "services": { "intro": "Ce que nous pouvons faire pour votre toit." },
+      "about": {
+        "paragraphs": [
+          "Dakwerken Voorbeeld est une entreprise fictive : ce fichier montre seulement le format de client.json.",
+          "Pour un vrai client, ce texte présente qui dirige l’entreprise, depuis quand et dans quelle région."
+        ]
+      },
+      "process": {
+        "steps": [
+          { "title": "Demande", "text": "Vous appelez ou remplissez le formulaire." },
+          { "title": "Visite", "text": "Nous examinons le toit sur place." },
+          { "title": "Devis", "text": "Vous recevez un prix clair, poste par poste." },
+          { "title": "Travaux", "text": "Nous réalisons les travaux comme convenu." }
+        ]
+      },
+      "whyUs": {
+        "items": [
+          { "icon": "user-check", "title": "Un seul interlocuteur", "text": "La même personne du devis à la réception." },
+          { "icon": "receipt", "title": "Devis clair", "text": "Chaque poste séparément, sans surprise." }
+        ]
+      },
+      "faq": {
+        "items": [
+          { "q": "Dans quelle région travaillez-vous ?", "a": "À Gand et dans les communes voisines." },
+          { "q": "Le devis est-il gratuit ?", "a": "Oui, le devis est sans engagement." }
+        ]
+      },
+      "contact": { "text": "Décrivez brièvement votre toit ou le problème. Nous vous rappelons pour fixer une visite." },
+      "footer": { "tagline": "Travaux de toiture à Gand et environs." }
+    }
+  },
+
+  "services": [
+    {
+      "id": "platte-daken",
+      "icon": "layers",
+      "nl": {
+        "title": "Platte daken",
+        "summary": "Nieuwe dakbedekking of renovatie van een plat dak.",
+        "body": ["Bij een echte klant: welke materialen, voor welke daken, wat de klant ervan heeft."]
+      },
+      "fr": {
+        "slug": "toits-plats",
+        "title": "Toits plats",
+        "summary": "Nouvelle étanchéité ou rénovation d’un toit plat.",
+        "body": ["Pour un vrai client : quels matériaux, pour quels toits, ce que le client y gagne."]
+      }
+    },
+    {
+      "id": "hellende-daken",
+      "icon": "house",
+      "nl": { "title": "Hellende daken", "summary": "Pannen of leien vernieuwen en herstellen." },
+      "fr": { "slug": "toits-inclines", "title": "Toits inclinés", "summary": "Remplacement et réparation de tuiles ou d’ardoises." }
+    },
+    {
+      "id": "dakgoten",
+      "icon": "droplets",
+      "nl": { "title": "Dakgoten", "summary": "Lekkende of verstopte goten herstellen of vervangen." },
+      "fr": { "slug": "gouttieres", "title": "Gouttières", "summary": "Réparer ou remplacer des gouttières qui fuient ou sont bouchées." }
+    }
+  ],
+
+  "regions": [
+    { "id": "gent", "nl": { "name": "Gent" }, "fr": { "name": "Gand" } },
+    { "id": "merelbeke", "nl": { "name": "Merelbeke" }, "fr": { "name": "Merelbeke" } }
+  ],
+
+  "reviews": []
+}

@@ -34,7 +34,7 @@ const mapSrc = `https://maps.google.com/maps?q=${encodeURIComponent(`${addressLi
     <div class="grid grid-cols-1 gap-12 sm:grid-cols-2 lg:grid-cols-[1.2fr_1fr_1fr_1.3fr]">
       <div>
         <a href={homePath(lang)} aria-label={`${facts.name} — ${t.nav.home}`}><Logo tone="dark" /></a>
-        <p class="mt-4 max-w-[280px] text-[15px] leading-relaxed text-on-ink-muted">{content.footer.tagline}</p>
+        {content.footer.tagline && <p class="mt-4 max-w-[280px] text-[15px] leading-relaxed text-on-ink-muted">{content.footer.tagline}</p>}
         {
           social.length > 0 && (
             <ul class="mt-5 flex gap-3">
@@ -81,7 +81,7 @@ const mapSrc = `https://maps.google.com/maps?q=${encodeURIComponent(`${addressLi
         <p class={heading}>{t.footer.contact}</p>
         <ul class="mt-4 flex flex-col gap-3">
           <li><a href={links.tel} class:list={[link, 'flex items-center gap-2.5']}><Icon name="phone" class="h-4 w-4 shrink-0 text-primary-on-ink" />{facts.phone}</a></li>
-          <li><a href={links.mail} class:list={[link, 'flex min-w-0 items-center gap-2.5']}><Icon name="mail" class="h-4 w-4 shrink-0 text-primary-on-ink" /><span class="break-all">{facts.email}</span></a></li>
+          {links.mail && <li><a href={links.mail} class:list={[link, 'flex min-w-0 items-center gap-2.5']}><Icon name="mail" class="h-4 w-4 shrink-0 text-primary-on-ink" /><span class="break-all">{facts.email}</span></a></li>}
           {
             facts.showAddress && (
               <li>
@@ -147,7 +147,7 @@ const mapSrc = `https://maps.google.com/maps?q=${encodeURIComponent(`${addressLi
     }
 
     <div class="mt-8 flex flex-col gap-3 border-t border-ink-line pt-6 text-[14px] text-on-ink-muted sm:flex-row sm:items-center sm:justify-between">
-      <p>© {year} {facts.legalName}{facts.vat && ` · ${t.contact.vat} ${facts.vat}`}</p>
+      <p>© {year} {facts.legalName ?? facts.name}{facts.vat && ` · ${t.contact.vat} ${facts.vat}`}</p>
       <ul class="flex flex-wrap gap-x-6 gap-y-2">
         <li><a href={legalPath(lang, 'privacy')} class="underline-offset-4 hover:text-on-ink hover:underline">{t.legal.privacy}</a></li>
         <li><a href={legalPath(lang, 'cookies')} class="underline-offset-4 hover:text-on-ink hover:underline">{t.legal.cookies}</a></li>

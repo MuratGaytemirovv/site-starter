@@ -39,7 +39,7 @@ export function localBusiness(site: URL, lang: Lang, opts: { description?: strin
     description: opts.description,
     url: abs(site, homePath(lang)),
     telephone: digits.length > 6 ? digits : undefined,
-    email: facts.email.includes('@example.') ? undefined : facts.email,
+    email: facts.email?.includes('@example.') ? undefined : facts.email,
     image: opts.image,
     vatID: facts.vat,
     foundingDate: facts.foundedYear ? String(facts.foundedYear) : undefined,

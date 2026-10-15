@@ -100,6 +100,11 @@ const nl = {
     loadMap: 'Kaart laden',
     openMaps: 'Open in Google Maps',
   },
+  // Homepage headings used when client.json leaves them out (scripts/apply-client.ts).
+  homeDefaults: {
+    secondaryCta: 'Bekijk ons werk',
+    titles: { services: 'Onze diensten', about: 'Wie we zijn', process: 'Zo werken we', whyUs: 'Waarom klanten voor ons kiezen', gallery: 'Recent werk', reviews: 'Wat klanten zeggen', faq: 'Veelgestelde vragen', contact: 'Neem contact op' },
+  },
   notFound: { title: 'Pagina niet gevonden', text: 'Deze pagina bestaat niet (meer). Misschien vindt u wat u zoekt via de startpagina.' },
   days: { Monday: 'ma', Tuesday: 'di', Wednesday: 'wo', Thursday: 'do', Friday: 'vr', Saturday: 'za', Sunday: 'zo' } as Days,
   dateLocale: 'nl-BE',
@@ -197,6 +202,10 @@ const fr: UI = {
     loadMap: 'Afficher la carte',
     openMaps: 'Ouvrir dans Google Maps',
   },
+  homeDefaults: {
+    secondaryCta: 'Voir nos réalisations',
+    titles: { services: 'Nos services', about: 'Qui sommes-nous', process: 'Comment nous travaillons', whyUs: 'Pourquoi nous choisir', gallery: 'Nos réalisations', reviews: 'Ce que disent nos clients', faq: 'Questions fréquentes', contact: 'Contactez-nous' },
+  },
   notFound: { title: 'Page introuvable', text: 'Cette page n’existe pas (ou plus). Vous trouverez peut-être ce que vous cherchez via la page d’accueil.' },
   days: { Monday: 'lun', Tuesday: 'mar', Wednesday: 'mer', Thursday: 'jeu', Friday: 'ven', Saturday: 'sam', Sunday: 'dim' },
   dateLocale: 'fr-BE',
@@ -292,6 +301,10 @@ const en: UI = {
     loadMap: 'Load map',
     openMaps: 'Open in Google Maps',
   },
+  homeDefaults: {
+    secondaryCta: 'See our work',
+    titles: { services: 'Our services', about: 'Who we are', process: 'How we work', whyUs: 'Why clients choose us', gallery: 'Recent work', reviews: 'What clients say', faq: 'Frequently asked questions', contact: 'Get in touch' },
+  },
   notFound: { title: 'Page not found', text: 'This page does not exist (any more). You may find what you are looking for via the home page.' },
   days: { Monday: 'Mon', Tuesday: 'Tue', Wednesday: 'Wed', Thursday: 'Thu', Friday: 'Fri', Saturday: 'Sat', Sunday: 'Sun' },
   dateLocale: 'en-GB',
@@ -386,6 +399,10 @@ const ru: UI = {
     mapPlaceholder: 'Карта Google Maps — загрузится только с вашего согласия.',
     loadMap: 'Показать карту',
     openMaps: 'Открыть в Google Maps',
+  },
+  homeDefaults: {
+    secondaryCta: 'Посмотреть работы',
+    titles: { services: 'Наши услуги', about: 'Кто мы', process: 'Как мы работаем', whyUs: 'Почему выбирают нас', gallery: 'Наши работы', reviews: 'Отзывы клиентов', faq: 'Частые вопросы', contact: 'Свяжитесь с нами' },
   },
   notFound: { title: 'Страница не найдена', text: 'Такой страницы нет (или уже нет). Возможно, нужное найдётся на главной.' },
   days: { Monday: 'пн', Tuesday: 'вт', Wednesday: 'ср', Thursday: 'чт', Friday: 'пт', Saturday: 'сб', Sunday: 'вс' },

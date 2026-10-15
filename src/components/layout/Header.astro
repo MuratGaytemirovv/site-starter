@@ -134,9 +134,13 @@ const languages =
         <a href={links.tel} class="flex items-center gap-2 text-[15px] font-medium text-heading">
           <Icon name="phone" class="h-4 w-4 text-primary-text" />{facts.phone}
         </a>
-        <a href={links.mail} class="flex min-w-0 items-center gap-2 text-[15px] font-medium text-heading">
-          <Icon name="mail" class="h-4 w-4 shrink-0 text-primary-text" /><span class="truncate">{facts.email}</span>
-        </a>
+        {
+          links.mail && (
+            <a href={links.mail} class="flex min-w-0 items-center gap-2 text-[15px] font-medium text-heading">
+              <Icon name="mail" class="h-4 w-4 shrink-0 text-primary-text" /><span class="truncate">{facts.email}</span>
+            </a>
+          )
+        }
         {hasContact && <Button href={sectionHref(lang, 'contact')} size="lg" class="mt-2">{t.cta.quote}</Button>}
       </div>
     </div>

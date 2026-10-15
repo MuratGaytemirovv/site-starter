@@ -1,0 +1,1727 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "properties": {
+    "$schema": {
+      "type": "string"
+    },
+    "demo": {
+      "type": "boolean",
+      "description": "true = preview built from public info, facts not confirmed by the business (shows a notice)"
+    },
+    "launched": {
+      "default": false,
+      "description": "true only on the real domain: enables indexing; strict checks apply",
+      "type": "boolean"
+    },
+    "sources": {
+      "minItems": 1,
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "what": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Which facts or files, e.g. \"phone, hours, reviews\" or \"photo client/p1.jpg\""
+          },
+          "from": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Google Business Profile, old site URL, owner by phone…"
+          },
+          "date": {
+            "anyOf": [
+              {
+                "type": "string",
+                "pattern": "^\\d{4}-\\d{2}-\\d{2}$"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          }
+        },
+        "required": [
+          "what",
+          "from"
+        ],
+        "additionalProperties": false
+      },
+      "description": "Where the facts come from — needed for review"
+    },
+    "facts": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Trade name as the business uses it"
+        },
+        "legalName": {
+          "description": "Registered name with legal form (BV, SRL…); required at launch",
+          "anyOf": [
+            {
+              "type": "string",
+              "minLength": 1
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "vat": {
+          "description": "VAT/KBO number, e.g. \"BE 0123.456.789\"; required at launch in BE",
+          "anyOf": [
+            {
+              "type": "string",
+              "minLength": 1
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "owner": {
+          "anyOf": [
+            {
+              "type": "string",
+              "minLength": 1
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "foundedYear": {
+          "anyOf": [
+            {
+              "type": "integer",
+              "minimum": 1800,
+              "maximum": 2100
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "phone": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Main number as shown, e.g. \"0470 12 34 56\""
+        },
+        "phoneE164": {
+          "description": "Optional; derived from phone for BE/NL/FR/LU/DE",
+          "anyOf": [
+            {
+              "type": "string",
+              "pattern": "^\\+\\d{8,15}$"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "whatsappE164": {
+          "anyOf": [
+            {
+              "type": "string",
+              "pattern": "^\\+\\d{8,15}$"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "email": {
+          "description": "Public e-mail; null = only the phone is shown; required at launch",
+          "anyOf": [
+            {
+              "type": "string",
+              "format": "email",
+              "pattern": "^(?:[A-Za-z0-9_'+\\-]+\\.)*[A-Za-z0-9_'+\\-]*[A-Za-z0-9_+-]@(?:[A-Za-z0-9][A-Za-z0-9\\-]*\\.)+[A-Za-z]{2,}$"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "address": {
+          "type": "object",
+          "properties": {
+            "street": {
+              "anyOf": [
+                {
+                  "type": "string",
+                  "minLength": 1
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "postalCode": {
+              "anyOf": [
+                {
+                  "type": "string",
+                  "minLength": 1
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "city": {
+              "type": "string",
+              "minLength": 1
+            },
+            "region": {
+              "description": "Province",
+              "anyOf": [
+                {
+                  "type": "string",
+                  "minLength": 1
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "country": {
+              "default": "BE",
+              "type": "string",
+              "minLength": 2,
+              "maxLength": 2
+            }
+          },
+          "required": [
+            "city"
+          ],
+          "additionalProperties": false
+        },
+        "showAddress": {
+          "default": false,
+          "description": "Show street address and map (needs street + postalCode). false for service-area businesses",
+          "type": "boolean"
+        },
+        "openingHours": {
+          "default": [],
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "days": {
+                "minItems": 1,
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "enum": [
+                    "Monday",
+                    "Tuesday",
+                    "Wednesday",
+                    "Thursday",
+                    "Friday",
+                    "Saturday",
+                    "Sunday"
+                  ]
+                }
+              },
+              "opens": {
+                "type": "string",
+                "pattern": "^\\d{2}:\\d{2}$"
+              },
+              "closes": {
+                "type": "string",
+                "pattern": "^\\d{2}:\\d{2}$"
+              }
+            },
+            "required": [
+              "days",
+              "opens",
+              "closes"
+            ],
+            "additionalProperties": false
+          }
+        },
+        "geo": {
+          "anyOf": [
+            {
+              "type": "object",
+              "properties": {
+                "lat": {
+                  "type": "number"
+                },
+                "lng": {
+                  "type": "number"
+                }
+              },
+              "required": [
+                "lat",
+                "lng"
+              ],
+              "additionalProperties": false
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "reviews": {
+          "type": "object",
+          "properties": {
+            "score": {
+              "description": "Google rating, e.g. 4.9",
+              "anyOf": [
+                {
+                  "anyOf": [
+                    {
+                      "type": "number",
+                      "minimum": 1,
+                      "maximum": 5
+                    },
+                    {
+                      "type": "string",
+                      "pattern": "^[1-5]([.,]\\d)?$"
+                    }
+                  ]
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "count": {
+              "anyOf": [
+                {
+                  "type": "integer",
+                  "minimum": 0,
+                  "maximum": 9007199254740991
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "googleUrl": {
+              "anyOf": [
+                {
+                  "type": "string",
+                  "format": "uri"
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            }
+          },
+          "additionalProperties": false
+        },
+        "social": {
+          "type": "object",
+          "properties": {
+            "facebook": {
+              "anyOf": [
+                {
+                  "type": "string",
+                  "format": "uri"
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "instagram": {
+              "anyOf": [
+                {
+                  "type": "string",
+                  "format": "uri"
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "tiktok": {
+              "anyOf": [
+                {
+                  "type": "string",
+                  "format": "uri"
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            }
+          },
+          "additionalProperties": false
+        },
+        "schemaType": {
+          "default": "LocalBusiness",
+          "description": "schema.org type: RoofingContractor, Plumber, Electrician, HairSalon… or LocalBusiness",
+          "type": "string",
+          "pattern": "^[A-Z][A-Za-z]+$"
+        },
+        "siteUrl": {
+          "description": "Final domain with https://; required at launch",
+          "anyOf": [
+            {
+              "type": "string",
+              "format": "uri"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      },
+      "required": [
+        "name",
+        "phone",
+        "address"
+      ],
+      "additionalProperties": false
+    },
+    "design": {
+      "default": {
+        "style": "strict"
+      },
+      "type": "object",
+      "properties": {
+        "style": {
+          "default": "strict",
+          "description": "strict = sober/corporate, warm = friendly/craft, modern = bold/clean",
+          "type": "string",
+          "enum": [
+            "strict",
+            "warm",
+            "modern"
+          ]
+        },
+        "primary": {
+          "description": "Brand accent colour; default = the style colour",
+          "anyOf": [
+            {
+              "type": "string",
+              "pattern": "^#[0-9a-fA-F]{6}$"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "ink": {
+          "description": "Dark brand colour for dark sections (≥7:1 against white)",
+          "anyOf": [
+            {
+              "type": "string",
+              "pattern": "^#[0-9a-fA-F]{6}$"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "logo": {
+          "description": "null = text logo from the name",
+          "anyOf": [
+            {
+              "type": "string",
+              "pattern": "^(?!\\/|https?:)[\\w./-]+\\.(jpe?g|png|webp|avif|svg)$",
+              "description": "Path inside src/assets/images/ (the file must exist). Save photos there first; no URLs."
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "ogImage": {
+          "description": "Share image; null = hero photo",
+          "anyOf": [
+            {
+              "type": "string",
+              "pattern": "^(?!\\/|https?:)[\\w./-]+\\.(jpe?g|png|webp|avif|svg)$",
+              "description": "Path inside src/assets/images/ (the file must exist). Save photos there first; no URLs."
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "heroVariant": {
+          "description": "split = text + photo, cover = photo behind text; default = style default",
+          "anyOf": [
+            {
+              "type": "string",
+              "enum": [
+                "split",
+                "cover"
+              ]
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      },
+      "additionalProperties": false
+    },
+    "languages": {
+      "minItems": 1,
+      "type": "array",
+      "items": {
+        "type": "string",
+        "enum": [
+          "nl",
+          "fr",
+          "en",
+          "ru"
+        ]
+      },
+      "description": "First = main language (site root); others under /<lang>/"
+    },
+    "sections": {
+      "default": [
+        "hero",
+        "trust",
+        "services",
+        "about",
+        "process",
+        "gallery",
+        "why-us",
+        "reviews",
+        "faq",
+        "contact"
+      ],
+      "description": "Homepage sections in display order; leave one out to hide it. Sections without data hide themselves",
+      "type": "array",
+      "items": {
+        "type": "string",
+        "enum": [
+          "hero",
+          "trust",
+          "services",
+          "about",
+          "process",
+          "gallery",
+          "why-us",
+          "reviews",
+          "faq",
+          "contact"
+        ]
+      }
+    },
+    "topbar": {
+      "default": true,
+      "description": "Thin bar above the header with phone/e-mail (desktop)",
+      "type": "boolean"
+    },
+    "home": {
+      "type": "object",
+      "propertyNames": {
+        "type": "string",
+        "enum": [
+          "nl",
+          "fr",
+          "en",
+          "ru"
+        ]
+      },
+      "additionalProperties": {
+        "type": "object",
+        "properties": {
+          "meta": {
+            "type": "object",
+            "properties": {
+              "title": {
+                "type": "string",
+                "minLength": 1,
+                "description": "Browser/Google title, ~50–60 chars: what + where + name"
+              },
+              "description": {
+                "type": "string",
+                "minLength": 1,
+                "description": "Google snippet, ~140–155 chars"
+              },
+              "updated": {
+                "description": "Date of the last real content change (sitemap lastmod)",
+                "type": "string",
+                "pattern": "^\\d{4}-\\d{2}-\\d{2}$"
+              }
+            },
+            "required": [
+              "title",
+              "description"
+            ],
+            "additionalProperties": false
+          },
+          "hero": {
+            "type": "object",
+            "properties": {
+              "eyebrow": {
+                "description": "Short line above the H1, e.g. \"Gent · Oost-Vlaanderen\"",
+                "anyOf": [
+                  {
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              },
+              "title": {
+                "type": "string",
+                "minLength": 1,
+                "description": "H1: what you do + where"
+              },
+              "titleAccent": {
+                "description": "Second H1 line in the accent colour: a short, true promise",
+                "anyOf": [
+                  {
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              },
+              "subtitle": {
+                "anyOf": [
+                  {
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              },
+              "primaryCta": {
+                "description": "Main button (to the contact form); default = \"request a quote\" in this language",
+                "anyOf": [
+                  {
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              },
+              "secondaryCta": {
+                "description": "Second button; default = \"see our work\" in this language",
+                "anyOf": [
+                  {
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              },
+              "secondaryTarget": {
+                "description": "Section the second button scrolls to; default gallery",
+                "anyOf": [
+                  {
+                    "type": "string",
+                    "enum": [
+                      "hero",
+                      "trust",
+                      "services",
+                      "about",
+                      "process",
+                      "gallery",
+                      "why-us",
+                      "reviews",
+                      "faq",
+                      "contact"
+                    ]
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              },
+              "bullets": {
+                "default": [],
+                "description": "Up to 4 short, confirmed advantages",
+                "maxItems": 4,
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "minLength": 1
+                }
+              },
+              "image": {
+                "anyOf": [
+                  {
+                    "type": "string",
+                    "pattern": "^(?!\\/|https?:)[\\w./-]+\\.(jpe?g|png|webp|avif|svg)$",
+                    "description": "Path inside src/assets/images/ (the file must exist). Save photos there first; no URLs."
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              },
+              "imageAlt": {
+                "anyOf": [
+                  {
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              }
+            },
+            "required": [
+              "title"
+            ],
+            "additionalProperties": false
+          },
+          "trust": {
+            "description": "Strip of 3–4 confirmed trust facts (warranty, insurance, certification, area). Empty = hidden",
+            "type": "object",
+            "properties": {
+              "items": {
+                "default": [],
+                "maxItems": 4,
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "icon": {
+                      "type": "string",
+                      "pattern": "^(custom:)?[a-z0-9]+(-[a-z0-9]+)*$",
+                      "description": "Lucide icon name from lucide.dev/icons (\"hammer\", \"paint-roller\"), or \"custom:<file>\" for src/assets/icons/<file>.svg"
+                    },
+                    "label": {
+                      "type": "string",
+                      "minLength": 1
+                    }
+                  },
+                  "required": [
+                    "icon",
+                    "label"
+                  ],
+                  "additionalProperties": false
+                }
+              }
+            },
+            "additionalProperties": false
+          },
+          "services": {
+            "type": "object",
+            "properties": {
+              "eyebrow": {
+                "description": "Small label above the title; default = the section name",
+                "anyOf": [
+                  {
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              },
+              "title": {
+                "description": "Section title; default = a neutral title in this language",
+                "anyOf": [
+                  {
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              },
+              "intro": {
+                "anyOf": [
+                  {
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              }
+            },
+            "additionalProperties": false
+          },
+          "about": {
+            "type": "object",
+            "properties": {
+              "eyebrow": {
+                "description": "Small label above the title; default = the section name",
+                "anyOf": [
+                  {
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              },
+              "title": {
+                "description": "Section title; default = a neutral title in this language",
+                "anyOf": [
+                  {
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              },
+              "paragraphs": {
+                "default": [],
+                "description": "Who is behind the business; empty = section hidden",
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "minLength": 1
+                }
+              },
+              "stats": {
+                "default": [],
+                "description": "Only confirmed numbers",
+                "maxItems": 3,
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "value": {
+                      "type": "string",
+                      "minLength": 1,
+                      "description": "Shown as written: \"15 jaar\", \"400+\""
+                    },
+                    "label": {
+                      "type": "string",
+                      "minLength": 1
+                    }
+                  },
+                  "required": [
+                    "value",
+                    "label"
+                  ],
+                  "additionalProperties": false
+                }
+              },
+              "image": {
+                "anyOf": [
+                  {
+                    "type": "string",
+                    "pattern": "^(?!\\/|https?:)[\\w./-]+\\.(jpe?g|png|webp|avif|svg)$",
+                    "description": "Path inside src/assets/images/ (the file must exist). Save photos there first; no URLs."
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              },
+              "imageAlt": {
+                "anyOf": [
+                  {
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              }
+            },
+            "additionalProperties": false
+          },
+          "process": {
+            "description": "How a job goes, 3–5 steps; empty = hidden",
+            "type": "object",
+            "properties": {
+              "eyebrow": {
+                "description": "Small label above the title; default = the section name",
+                "anyOf": [
+                  {
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              },
+              "title": {
+                "description": "Section title; default = a neutral title in this language",
+                "anyOf": [
+                  {
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              },
+              "steps": {
+                "default": [],
+                "maxItems": 5,
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "title": {
+                      "type": "string",
+                      "minLength": 1
+                    },
+                    "text": {
+                      "type": "string",
+                      "minLength": 1
+                    }
+                  },
+                  "required": [
+                    "title",
+                    "text"
+                  ],
+                  "additionalProperties": false
+                }
+              }
+            },
+            "additionalProperties": false
+          },
+          "whyUs": {
+            "type": "object",
+            "properties": {
+              "eyebrow": {
+                "description": "Small label above the title; default = the section name",
+                "anyOf": [
+                  {
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              },
+              "title": {
+                "description": "Section title; default = a neutral title in this language",
+                "anyOf": [
+                  {
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              },
+              "items": {
+                "default": [],
+                "maxItems": 6,
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "icon": {
+                      "type": "string",
+                      "pattern": "^(custom:)?[a-z0-9]+(-[a-z0-9]+)*$",
+                      "description": "Lucide icon name from lucide.dev/icons (\"hammer\", \"paint-roller\"), or \"custom:<file>\" for src/assets/icons/<file>.svg"
+                    },
+                    "title": {
+                      "type": "string",
+                      "minLength": 1
+                    },
+                    "text": {
+                      "type": "string",
+                      "minLength": 1
+                    }
+                  },
+                  "required": [
+                    "icon",
+                    "title",
+                    "text"
+                  ],
+                  "additionalProperties": false
+                }
+              }
+            },
+            "additionalProperties": false
+          },
+          "gallery": {
+            "type": "object",
+            "properties": {
+              "eyebrow": {
+                "description": "Small label above the title; default = the section name",
+                "anyOf": [
+                  {
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              },
+              "title": {
+                "description": "Section title; default = a neutral title in this language",
+                "anyOf": [
+                  {
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              },
+              "intro": {
+                "anyOf": [
+                  {
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              }
+            },
+            "additionalProperties": false
+          },
+          "reviews": {
+            "type": "object",
+            "properties": {
+              "eyebrow": {
+                "description": "Small label above the title; default = the section name",
+                "anyOf": [
+                  {
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              },
+              "title": {
+                "description": "Section title; default = a neutral title in this language",
+                "anyOf": [
+                  {
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              }
+            },
+            "additionalProperties": false
+          },
+          "faq": {
+            "description": "Real questions with honest answers; empty = hidden",
+            "type": "object",
+            "properties": {
+              "eyebrow": {
+                "description": "Small label above the title; default = the section name",
+                "anyOf": [
+                  {
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              },
+              "title": {
+                "description": "Section title; default = a neutral title in this language",
+                "anyOf": [
+                  {
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              },
+              "items": {
+                "default": [],
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "q": {
+                      "type": "string",
+                      "minLength": 1
+                    },
+                    "a": {
+                      "type": "string",
+                      "minLength": 1
+                    }
+                  },
+                  "required": [
+                    "q",
+                    "a"
+                  ],
+                  "additionalProperties": false
+                }
+              }
+            },
+            "additionalProperties": false
+          },
+          "contact": {
+            "type": "object",
+            "properties": {
+              "eyebrow": {
+                "description": "Small label above the title; default = the section name",
+                "anyOf": [
+                  {
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              },
+              "title": {
+                "description": "Section title; default = a neutral title in this language",
+                "anyOf": [
+                  {
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              },
+              "text": {
+                "description": "What happens after someone sends the form",
+                "anyOf": [
+                  {
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              },
+              "responseTime": {
+                "description": "Only a real commitment, e.g. \"Antwoord binnen 1 werkdag\"",
+                "anyOf": [
+                  {
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              }
+            },
+            "additionalProperties": false
+          },
+          "footer": {
+            "type": "object",
+            "properties": {
+              "tagline": {
+                "anyOf": [
+                  {
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              }
+            },
+            "additionalProperties": false
+          }
+        },
+        "required": [
+          "meta",
+          "hero"
+        ],
+        "additionalProperties": false
+      },
+      "description": "Homepage texts, one object per site language"
+    },
+    "services": {
+      "minItems": 1,
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "pattern": "^[a-z0-9]+(-[a-z0-9]+)*$",
+            "description": "Latin slug; file name, default URL and translation key"
+          },
+          "icon": {
+            "type": "string",
+            "pattern": "^(custom:)?[a-z0-9]+(-[a-z0-9]+)*$",
+            "description": "Lucide icon name from lucide.dev/icons (\"hammer\", \"paint-roller\"), or \"custom:<file>\" for src/assets/icons/<file>.svg"
+          },
+          "image": {
+            "anyOf": [
+              {
+                "type": "string",
+                "pattern": "^(?!\\/|https?:)[\\w./-]+\\.(jpe?g|png|webp|avif|svg)$",
+                "description": "Path inside src/assets/images/ (the file must exist). Save photos there first; no URLs."
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "updated": {
+            "type": "string",
+            "pattern": "^\\d{4}-\\d{2}-\\d{2}$"
+          },
+          "nl": {
+            "description": "Texts in \"nl\" — required for every language in \"languages\"",
+            "type": "object",
+            "properties": {
+              "slug": {
+                "description": "URL in this language; default = id",
+                "type": "string",
+                "pattern": "^[a-z0-9]+(-[a-z0-9]+)*$"
+              },
+              "title": {
+                "type": "string",
+                "minLength": 1
+              },
+              "summary": {
+                "type": "string",
+                "minLength": 1,
+                "description": "One sentence: what it is and for whom"
+              },
+              "imageAlt": {
+                "anyOf": [
+                  {
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              },
+              "body": {
+                "default": [],
+                "description": "Paragraphs for the service page",
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "minLength": 1
+                }
+              }
+            },
+            "required": [
+              "title",
+              "summary"
+            ],
+            "additionalProperties": false
+          },
+          "fr": {
+            "description": "Texts in \"fr\" — required for every language in \"languages\"",
+            "type": "object",
+            "properties": {
+              "slug": {
+                "description": "URL in this language; default = id",
+                "type": "string",
+                "pattern": "^[a-z0-9]+(-[a-z0-9]+)*$"
+              },
+              "title": {
+                "type": "string",
+                "minLength": 1
+              },
+              "summary": {
+                "type": "string",
+                "minLength": 1,
+                "description": "One sentence: what it is and for whom"
+              },
+              "imageAlt": {
+                "anyOf": [
+                  {
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              },
+              "body": {
+                "default": [],
+                "description": "Paragraphs for the service page",
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "minLength": 1
+                }
+              }
+            },
+            "required": [
+              "title",
+              "summary"
+            ],
+            "additionalProperties": false
+          },
+          "en": {
+            "description": "Texts in \"en\" — required for every language in \"languages\"",
+            "type": "object",
+            "properties": {
+              "slug": {
+                "description": "URL in this language; default = id",
+                "type": "string",
+                "pattern": "^[a-z0-9]+(-[a-z0-9]+)*$"
+              },
+              "title": {
+                "type": "string",
+                "minLength": 1
+              },
+              "summary": {
+                "type": "string",
+                "minLength": 1,
+                "description": "One sentence: what it is and for whom"
+              },
+              "imageAlt": {
+                "anyOf": [
+                  {
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              },
+              "body": {
+                "default": [],
+                "description": "Paragraphs for the service page",
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "minLength": 1
+                }
+              }
+            },
+            "required": [
+              "title",
+              "summary"
+            ],
+            "additionalProperties": false
+          },
+          "ru": {
+            "description": "Texts in \"ru\" — required for every language in \"languages\"",
+            "type": "object",
+            "properties": {
+              "slug": {
+                "description": "URL in this language; default = id",
+                "type": "string",
+                "pattern": "^[a-z0-9]+(-[a-z0-9]+)*$"
+              },
+              "title": {
+                "type": "string",
+                "minLength": 1
+              },
+              "summary": {
+                "type": "string",
+                "minLength": 1,
+                "description": "One sentence: what it is and for whom"
+              },
+              "imageAlt": {
+                "anyOf": [
+                  {
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              },
+              "body": {
+                "default": [],
+                "description": "Paragraphs for the service page",
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "minLength": 1
+                }
+              }
+            },
+            "required": [
+              "title",
+              "summary"
+            ],
+            "additionalProperties": false
+          }
+        },
+        "required": [
+          "id",
+          "icon"
+        ],
+        "additionalProperties": false
+      }
+    },
+    "regions": {
+      "default": [],
+      "description": "Towns served; a page only for those with own body text",
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "pattern": "^[a-z0-9]+(-[a-z0-9]+)*$"
+          },
+          "updated": {
+            "type": "string",
+            "pattern": "^\\d{4}-\\d{2}-\\d{2}$"
+          },
+          "nl": {
+            "description": "Texts in \"nl\" — required for every language in \"languages\"",
+            "type": "object",
+            "properties": {
+              "name": {
+                "type": "string",
+                "minLength": 1
+              },
+              "slug": {
+                "type": "string",
+                "pattern": "^[a-z0-9]+(-[a-z0-9]+)*$"
+              },
+              "body": {
+                "default": [],
+                "description": "Own, specific text for this town; empty = listed by name only, no page",
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "minLength": 1
+                }
+              }
+            },
+            "required": [
+              "name"
+            ],
+            "additionalProperties": false
+          },
+          "fr": {
+            "description": "Texts in \"fr\" — required for every language in \"languages\"",
+            "type": "object",
+            "properties": {
+              "name": {
+                "type": "string",
+                "minLength": 1
+              },
+              "slug": {
+                "type": "string",
+                "pattern": "^[a-z0-9]+(-[a-z0-9]+)*$"
+              },
+              "body": {
+                "default": [],
+                "description": "Own, specific text for this town; empty = listed by name only, no page",
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "minLength": 1
+                }
+              }
+            },
+            "required": [
+              "name"
+            ],
+            "additionalProperties": false
+          },
+          "en": {
+            "description": "Texts in \"en\" — required for every language in \"languages\"",
+            "type": "object",
+            "properties": {
+              "name": {
+                "type": "string",
+                "minLength": 1
+              },
+              "slug": {
+                "type": "string",
+                "pattern": "^[a-z0-9]+(-[a-z0-9]+)*$"
+              },
+              "body": {
+                "default": [],
+                "description": "Own, specific text for this town; empty = listed by name only, no page",
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "minLength": 1
+                }
+              }
+            },
+            "required": [
+              "name"
+            ],
+            "additionalProperties": false
+          },
+          "ru": {
+            "description": "Texts in \"ru\" — required for every language in \"languages\"",
+            "type": "object",
+            "properties": {
+              "name": {
+                "type": "string",
+                "minLength": 1
+              },
+              "slug": {
+                "type": "string",
+                "pattern": "^[a-z0-9]+(-[a-z0-9]+)*$"
+              },
+              "body": {
+                "default": [],
+                "description": "Own, specific text for this town; empty = listed by name only, no page",
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "minLength": 1
+                }
+              }
+            },
+            "required": [
+              "name"
+            ],
+            "additionalProperties": false
+          }
+        },
+        "required": [
+          "id"
+        ],
+        "additionalProperties": false
+      }
+    },
+    "gallery": {
+      "default": [],
+      "description": "Only own photos of real work",
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "pattern": "^[a-z0-9]+(-[a-z0-9]+)*$"
+          },
+          "service": {
+            "description": "id of the related service",
+            "anyOf": [
+              {
+                "type": "string",
+                "pattern": "^[a-z0-9]+(-[a-z0-9]+)*$"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "image": {
+            "type": "string",
+            "pattern": "^(?!\\/|https?:)[\\w./-]+\\.(jpe?g|png|webp|avif|svg)$",
+            "description": "Own photo of real work, inside src/assets/images/"
+          },
+          "nl": {
+            "description": "Texts in \"nl\" — required for every language in \"languages\"",
+            "type": "object",
+            "properties": {
+              "title": {
+                "type": "string",
+                "minLength": 1
+              },
+              "imageAlt": {
+                "type": "string",
+                "minLength": 1
+              }
+            },
+            "required": [
+              "title",
+              "imageAlt"
+            ],
+            "additionalProperties": false
+          },
+          "fr": {
+            "description": "Texts in \"fr\" — required for every language in \"languages\"",
+            "type": "object",
+            "properties": {
+              "title": {
+                "type": "string",
+                "minLength": 1
+              },
+              "imageAlt": {
+                "type": "string",
+                "minLength": 1
+              }
+            },
+            "required": [
+              "title",
+              "imageAlt"
+            ],
+            "additionalProperties": false
+          },
+          "en": {
+            "description": "Texts in \"en\" — required for every language in \"languages\"",
+            "type": "object",
+            "properties": {
+              "title": {
+                "type": "string",
+                "minLength": 1
+              },
+              "imageAlt": {
+                "type": "string",
+                "minLength": 1
+              }
+            },
+            "required": [
+              "title",
+              "imageAlt"
+            ],
+            "additionalProperties": false
+          },
+          "ru": {
+            "description": "Texts in \"ru\" — required for every language in \"languages\"",
+            "type": "object",
+            "properties": {
+              "title": {
+                "type": "string",
+                "minLength": 1
+              },
+              "imageAlt": {
+                "type": "string",
+                "minLength": 1
+              }
+            },
+            "required": [
+              "title",
+              "imageAlt"
+            ],
+            "additionalProperties": false
+          }
+        },
+        "required": [
+          "id",
+          "image"
+        ],
+        "additionalProperties": false
+      }
+    },
+    "reviews": {
+      "default": [],
+      "description": "Only real reviews, word for word",
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "author": {
+            "type": "string",
+            "minLength": 1
+          },
+          "text": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Word for word, as published"
+          },
+          "rating": {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 5
+          },
+          "source": {
+            "default": "Google",
+            "type": "string",
+            "minLength": 1
+          },
+          "date": {
+            "description": "As shown at the source, e.g. \"2026-08\" or \"3 months ago\"",
+            "anyOf": [
+              {
+                "type": "string",
+                "minLength": 1
+              },
+              {
+                "type": "null"
+              }
+            ]
+          }
+        },
+        "required": [
+          "author",
+          "text",
+          "rating"
+        ],
+        "additionalProperties": false
+      }
+    },
+    "privacy": {
+      "default": {
+        "processors": [
+          "vercel",
+          "resend",
+          "telegram"
+        ]
+      },
+      "type": "object",
+      "properties": {
+        "updated": {
+          "description": "Date the privacy text was approved; null = shown as draft; required at launch",
+          "anyOf": [
+            {
+              "type": "string",
+              "pattern": "^\\d{4}-\\d{2}-\\d{2}$"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "processors": {
+          "default": [
+            "vercel",
+            "resend",
+            "telegram"
+          ],
+          "type": "array",
+          "items": {
+            "type": "string",
+            "enum": [
+              "vercel",
+              "resend",
+              "telegram",
+              "odoo",
+              "whatsapp",
+              "accountant"
+            ]
+          }
+        }
+      },
+      "additionalProperties": false
+    }
+  },
+  "required": [
+    "demo",
+    "sources",
+    "facts",
+    "languages",
+    "home",
+    "services"
+  ],
+  "additionalProperties": false,
+  "title": "ISV Labs site-starter client file",
+  "description": "Everything for one local-business site. Only confirmed or publicly stated facts: unknown = null or leave the field out; never invent, never write [ЗАПОЛНИТЬ]. Apply with `npm run apply-client <file>`."
+}

@@ -24,7 +24,7 @@ const item = 'flex items-center gap-2 transition-colors hover:text-on-ink';
           </a>
         )
       }
-      <a href={links.mail} class={item}><Icon name="mail" class="h-3.5 w-3.5 text-primary-on-ink" />{facts.email}</a>
+      {links.mail && <a href={links.mail} class={item}><Icon name="mail" class="h-3.5 w-3.5 text-primary-on-ink" />{facts.email}</a>}
     </div>
     <div class="flex items-center gap-6">
       {

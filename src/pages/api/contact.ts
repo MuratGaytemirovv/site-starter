@@ -67,7 +67,7 @@ function reply(outcome: Outcome, lang: Lang, json: boolean, channels: string[] =
   const t = ui(lang);
   const esc = (s: string) => s.replace(/[&<>"]/g, (c) => `&#${c.charCodeAt(0)};`);
   const message = outcome === 'ok' ? t.form.success : outcome === 'invalid' ? t.form.invalid : outcome === 'rate-limited' ? t.form.tooMany : t.form.failed;
-  const contacts = outcome === 'ok' ? '' : `<p><a href="${links.tel}">${esc(facts.phone)}</a><br><a href="${links.mail}">${esc(facts.email)}</a></p>`;
+  const contacts = outcome === 'ok' ? '' : `<p><a href="${links.tel}">${esc(facts.phone)}</a>${links.mail && facts.email ? `<br><a href="${links.mail}">${esc(facts.email)}</a>` : ''}</p>`;
   const html = `<!doctype html><html lang="${t.htmlLang}"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="robots" content="noindex"><title>${esc(facts.name)}</title></head>
 <body style="font-family:system-ui,sans-serif;max-width:40rem;margin:4rem auto;padding:0 1.25rem;line-height:1.6">
 <p>${esc(message)}</p>${contacts}

@@ -30,7 +30,9 @@ Astro 7.3 + Tailwind v4 (`@tailwindcss/vite`) + TypeScript 6 (не 7 — `astro 
 
 | Что | Где |
 |---|---|
-| **Данные клиента** (всё, что меняется для нового сайта) | `src/data/site-facts.json` (факты без языка: контакты, часы, `geo`, `schemaType`, `style`, `brand`, `languages`, `launched`, `demo`, `privacy`), `src/data/sections.json` (порядок/вкл/варианты секций), `src/data/content/<lang>.json` (тексты главной, в т.ч. `about.stats`, `contact.responseTime`, `meta.updated`) — файл на каждый язык из `languages` |
+| **Файл клиента** — всё для сайта в одном JSON (так работают агенты фермы) | `client.json` в корне (схема `client.schema.json`, генерируется из `src/lib/client-schema.ts`; пример `examples/demo-dakwerker.json`). `npm run apply-client [файл]` проверяет и раскладывает по `src/data/*` и коллекциям (старые удаляет); при наличии `client.json` это же делает `prebuild`/`predev`. Неизвестное = `null`, не `[ЗАПОЛНИТЬ]` |
+| Скрипты | `scripts/apply-client.ts`, `client-schema.ts`, `check-placeholders.ts` (счёт `[ЗАПОЛНИТЬ]` при сборке, при `launched` — ошибка), `new-site.ts` (копия шаблона в свою папку и git, `--github` — репозиторий). Запуск — `node --experimental-strip-types` (Node ≥ 22.6, без tsx) |
+| Данные сайта (генерируются из `client.json`; без него — заглушки шаблона) | `src/data/site-facts.json` (факты без языка: контакты, часы, `geo`, `schemaType`, `style`, `brand`, `languages`, `launched`, `demo`, `privacy`), `src/data/sections.json` (порядок/вкл/варианты секций), `src/data/content/<lang>.json` (тексты главной, в т.ч. `about.stats`, `contact.responseTime`, `meta.updated`) — файл на каждый язык из `languages` |
 | Коллекции (JSON на элемент, тексты в папке языка) | `src/content/{services,regions,gallery}/<lang>/*.json`, `src/content/reviews/*.json`; схемы — `src/content.config.ts` (id = путь файла через `generateId`, иначе поле `slug` подменяет id). Одно имя файла в разных языках = перевод (hreflang) |
 | Фото и свои иконки | `src/assets/images/…` (в данных — путь внутри папки, неверный путь = ошибка сборки), `src/assets/icons/<имя>.svg` → `"icon": "custom:<имя>"` |
 | Проверка данных (Zod 4 из `astro/zod`) | `src/lib/schema.ts`, загрузка — `src/lib/site.ts` (ошибка в данных = понятное сообщение при сборке) |
@@ -51,8 +53,10 @@ Astro 7.3 + Tailwind v4 (`@tailwindcss/vite`) + TypeScript 6 (не 7 — `astro 
 
 ## Рабочий цикл
 Правка → `npm run build` → `visual-check` (4 ширины) → git add только затронутых → commit.
+Проверить данные клиента на шаблоне: `npm run apply-client examples/…json` → build → visual-check → **вернуть заглушки** (`rm client.json; git checkout -- src/data src/content; git clean -fd src/data src/content`) — в шаблоне `client.json` не коммитить.
+Новый клиент: `npm run new-site -- <slug> --client <файл>` (папка `../<slug>`); сдача — `LAUNCH.md`.
 
 ## ▶ Текущий статус (2026-10-15)
-**Сделано:** этап 1 (каркас, 3 стиля) и этап 2 (форма, юр. страницы, SEO, 4 языка). Подробности — `.claude/notes/stage-1.md`, `.claude/notes/stage-2.md`.
-**Дальше:** этап 3 из PLAN.md (`client.schema.json` + `npm run apply-client`, `new-site`).
-**Не проверено:** реальная доставка формы (нужны ключи Resend/Telegram на тестовом проекте Vercel).
+**Сделано:** этапы 1–3 (каркас и 3 стиля; форма, юр. страницы, SEO, 4 языка; `client.json` + `apply-client` + `new-site` + `LAUNCH.md`). Подробности — `.claude/notes/stage-{1,2,3}.md`.
+**Дальше:** этап 4 из PLAN.md (навык фермы «демо за 15 минут»: агент пишет `client.json` + фото → push → Vercel собирает).
+**Не проверено (нужны ключи/аккаунты владельца):** реальная доставка формы (Resend/Telegram) на тестовом проекте Vercel; `new-site --github` и импорт в Vercel вживую.

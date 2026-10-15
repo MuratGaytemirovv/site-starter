@@ -39,7 +39,7 @@ const digits = (value: string) => value.replace(/[^\d+]/g, '');
 
 export const links = {
   tel: `tel:${digits(facts.phoneE164)}`,
-  mail: `mailto:${facts.email}`,
+  mail: facts.email ? `mailto:${facts.email}` : null,
   whatsapp: facts.whatsappE164 ? `https://wa.me/${digits(facts.whatsappE164).replace('+', '')}` : null,
   maps: `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(
     `${facts.address.street}, ${facts.address.postalCode} ${facts.address.city}, ${facts.address.country}`,

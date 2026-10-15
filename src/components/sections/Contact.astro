@@ -44,7 +44,7 @@ const row = 'flex items-center gap-3 text-[16px] text-on-ink transition-colors h
           <li><a href={links.whatsapp} target="_blank" rel="noopener" class={row}><Icon name="whatsapp" class="h-5 w-5 shrink-0 text-primary-on-ink" />{t.cta.whatsapp}</a></li>
         )
       }
-      <li><a href={links.mail} class={row}><Icon name="mail" class="h-5 w-5 shrink-0 text-primary-on-ink" /><span class="break-all">{facts.email}</span></a></li>
+      {links.mail && <li><a href={links.mail} class={row}><Icon name="mail" class="h-5 w-5 shrink-0 text-primary-on-ink" /><span class="break-all">{facts.email}</span></a></li>}
       {
         facts.showAddress && (
           <li>
@@ -117,11 +117,11 @@ const row = 'flex items-center gap-3 text-[16px] text-on-ink transition-colors h
     <template data-form-invalid>{f.invalid}</template>
     <template data-form-limited>
       {f.tooMany}{' '}
-      <a href={links.tel} class="font-bold underline">{facts.phone}</a> · <a href={links.mail} class="font-bold underline">{facts.email}</a>
+      <a href={links.tel} class="font-bold underline">{facts.phone}</a>{links.mail && <> · <a href={links.mail} class="font-bold underline">{facts.email}</a></>}
     </template>
     <template data-form-failed>
       {f.failed}{' '}
-      <a href={links.tel} class="font-bold underline">{facts.phone}</a> · <a href={links.mail} class="font-bold underline">{facts.email}</a>
+      <a href={links.tel} class="font-bold underline">{facts.phone}</a>{links.mail && <> · <a href={links.mail} class="font-bold underline">{facts.email}</a></>}
     </template>
   </form>
 </Section>
