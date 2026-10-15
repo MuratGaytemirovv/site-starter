@@ -295,7 +295,9 @@ function write(files: Map<string, unknown>, languages: Lang[]) {
       removed++;
     }
   }
-  // Empty language folders of dropped languages go too; the collection roots stay.
+  // Empty language folders of dropped languages go too; the collection roots
+  // stay (git keeps no empty folders, a fresh clone may lack them).
+  fs.mkdirSync(rel('src/content/reviews'), { recursive: true });
   for (const col of COLLECTIONS) {
     const base = rel('src/content', col);
     fs.mkdirSync(base, { recursive: true });
@@ -394,7 +396,11 @@ function main() {
   }
 
   if (!checkOnly) {
-    if (sourcePath !== rel(CLIENT)) fs.copyFileSync(sourcePath, rel(CLIENT));
+    if (sourcePath !== rel(CLIENT)) {
+      // The copy lives in the project root: point its $schema there.
+      const { $schema: _, ...rest } = JSON.parse(fs.readFileSync(sourcePath, 'utf8'));
+      fs.writeFileSync(rel(CLIENT), json({ $schema: './client.schema.json', ...rest }));
+    }
     const { changed, removed } = write(files, client.languages);
     console.log(`apply-client: ${source} → ${files.size} файлов (изменено ${changed}, удалено старых ${removed})`);
   } else {

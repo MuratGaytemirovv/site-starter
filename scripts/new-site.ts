@@ -1,6 +1,9 @@
 // A new client site from this template, in its own folder and git repository.
 //
-//   npm run new-site -- <slug> [--client <client.json>] [--dir <folder>] [--github [--owner <org>] [--public]]
+//   npm run new-site -- <slug> [--client <client.json> [--images <folder>]] [--dir <folder>] [--github [--owner <org>] [--public]]
+//
+// --images: the client's photos, copied into src/assets/images/ keeping the
+// folder structure (client.json then refers to them as "client/hero.jpg"…).
 //
 // Copies the committed template (git ls-files — no node_modules, no history,
 // no template notes), applies the client file if given, makes the first
@@ -11,7 +14,7 @@
 // until launched: true.
 import fs from 'node:fs';
 import path from 'node:path';
-import { execFileSync } from 'node:child_process';
+import { execFileSync, spawnSync } from 'node:child_process';
 
 const template = process.cwd();
 const run = (cmd: string, args: string[], cwd: string) => execFileSync(cmd, args, { cwd, encoding: 'utf8', stdio: ['ignore', 'pipe', 'pipe'] }).trim();
@@ -25,20 +28,22 @@ const flag = (name: string) => {
   const i = args.indexOf(name);
   return i === -1 ? undefined : (args[i + 1] ?? fail(`${name} needs a value`));
 };
-const slug = args.find((a, i) => !a.startsWith('--') && !['--client', '--dir', '--owner'].includes(args[i - 1] ?? ''));
+const slug = args.find((a, i) => !a.startsWith('--') && !['--client', '--dir', '--owner', '--images'].includes(args[i - 1] ?? ''));
 if (!slug || !/^[a-z0-9]+(-[a-z0-9]+)*$/.test(slug)) {
-  fail('usage: npm run new-site -- <slug> [--client <file>] [--dir <folder>] [--github [--owner <org>]]  (slug: lowercase, digits, hyphens)');
+  fail('usage: npm run new-site -- <slug> [--client <file> [--images <folder>]] [--dir <folder>] [--github [--owner <org>] [--public]]  (slug: lowercase, digits, hyphens)');
 }
 const clientFile = flag('--client');
 const target = path.resolve(template, flag('--dir') ?? path.join('..', slug!));
 const github = args.includes('--github');
 const owner = flag('--owner');
+const imagesDir = flag('--images');
 const visibility = args.includes('--public') ? '--public' : '--private';
 
 // The copy must be a known template version: no uncommitted changes.
 if (run('git', ['status', '--porcelain'], template)) fail('the template has uncommitted changes — commit them first');
 if (fs.existsSync(target) && fs.readdirSync(target).length) fail(`${target} already exists and is not empty`);
 if (clientFile && !fs.existsSync(path.resolve(template, clientFile))) fail(`${clientFile} not found`);
+if (imagesDir && !fs.existsSync(path.resolve(template, imagesDir))) fail(`${imagesDir} not found`);
 
 const commit = run('git', ['rev-parse', '--short', 'HEAD'], template);
 // Template-only files: its history, plan and examples stay here.
@@ -59,14 +64,20 @@ fs.writeFileSync(pkgPath, `${JSON.stringify({ ...pkg, name: slug, version: '0.1.
 
 let name = slug!;
 if (clientFile) {
-  fs.copyFileSync(path.resolve(template, clientFile), path.join(target, 'client.json'));
+  if (imagesDir) fs.cpSync(path.resolve(template, imagesDir), path.join(target, 'src/assets/images'), { recursive: true });
   // The template's own apply-client and node_modules do the work; the copy needs no install for this.
-  console.log(
-    execFileSync(process.execPath, ['--experimental-strip-types', '--no-warnings', path.join(template, 'scripts/apply-client.ts')], {
-      cwd: target,
-      encoding: 'utf8',
-    }),
+  const applied = spawnSync(
+    process.execPath,
+    ['--experimental-strip-types', '--no-warnings', path.join(template, 'scripts/apply-client.ts'), path.resolve(template, clientFile)],
+    { cwd: target, encoding: 'utf8' },
   );
+  if (applied.status !== 0) {
+    // The folder was created by this run only — remove it, nothing half-made stays behind.
+    fs.rmSync(target, { recursive: true, force: true });
+    console.error(applied.stderr || applied.stdout);
+    fail('client file is not valid (see above) — nothing created');
+  }
+  console.log(applied.stdout);
   name = JSON.parse(fs.readFileSync(path.join(target, 'client.json'), 'utf8')).facts?.name ?? slug;
 }
 
