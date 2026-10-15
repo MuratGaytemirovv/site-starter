@@ -45,6 +45,7 @@
       "[ЗАПОЛНИТЬ] Wie zit achter het bedrijf, sinds wanneer, waar.",
       "[ЗАПОЛНИТЬ] Wat de klant van u kan verwachten."
     ],
+    "stats": [],
     "image": null,
     "imageAlt": ""
   },
@@ -95,7 +96,8 @@
   "contact": {
     "eyebrow": "Contact",
     "title": "[ЗАПОЛНИТЬ] Vertel ons over uw project",
-    "text": "[ЗАПОЛНИТЬ] Wat er gebeurt nadat iemand het formulier verstuurt."
+    "text": "[ЗАПОЛНИТЬ] Wat er gebeurt nadat iemand het formulier verstuurt.",
+    "responseTime": "[ЗАПОЛНИТЬ] Antwoord binnen 1 werkdag"
   },
 
   "footer": {

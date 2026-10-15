@@ -7,16 +7,18 @@ import Section from '../Section.astro';
 import SectionHeading from '../SectionHeading.astro';
 import Icon from '../Icon.astro';
 import { addressLine, facts, links } from '../../lib/site';
-import type { Content } from '../../lib/schema';
+import { legalPath } from '../../lib/routes';
+import type { Content, Lang } from '../../lib/schema';
 import type { Service } from '../../lib/collections';
 import type { UI } from '../../i18n/ui';
 
 interface Props {
   t: UI;
+  lang: Lang;
   content: Content['contact'];
   services: Service[];
 }
-const { t, content, services } = Astro.props;
+const { t, lang, content, services } = Astro.props;
 const f = t.form;
 const field =
   'w-full rounded-card border border-ink-line bg-ink-soft px-4 py-3.5 text-[16px] text-on-ink placeholder:text-on-ink-muted transition-[border-color,box-shadow] hover:border-on-ink-muted focus:border-primary-on-ink focus:shadow-[0_0_0_3px_color-mix(in_srgb,var(--color-primary)_35%,transparent)] focus:outline-none';
@@ -28,10 +30,10 @@ const row = 'flex items-center gap-3 text-[16px] text-on-ink transition-colors h
   <div class="flex flex-col">
     <SectionHeading eyebrow={content.eyebrow} title={content.title} intro={content.text} tone="dark" class="pb-8!" />
     {
-      facts.responseTime && (
+      content.responseTime && (
         <p class="flex items-center gap-2.5 text-[16px] font-semibold text-on-ink" data-reveal>
           <Icon name="clock" class="h-5 w-5 text-primary-on-ink" />
-          {facts.responseTime}
+          {content.responseTime}
         </p>
       )
     }
@@ -94,6 +96,7 @@ const row = 'flex items-center gap-3 text-[16px] text-on-ink transition-colors h
       <span class={label}>{f.message}</span>
       <textarea name="message" rows="4" maxlength="4000" placeholder={f.messagePlaceholder} class:list={[field, 'min-h-[120px] resize-y']}></textarea>
     </label>
+    <input type="hidden" name="lang" value={lang} />
     {/* Honeypot: hidden from people, bots fill it in. */}
     <div class="sr-only" aria-hidden="true">
       <label>{f.honeypot}<input name="website" type="text" tabindex="-1" autocomplete="off" /></label>
@@ -106,9 +109,16 @@ const row = 'flex items-center gap-3 text-[16px] text-on-ink transition-colors h
     >
       {f.submit}
     </button>
-    <p class="text-[13px] text-on-ink-muted">{f.privacyNote}</p>
+    <p class="text-[13px] text-on-ink-muted">
+      {f.privacyNote}{' '}<a href={legalPath(lang, 'privacy')} class="underline underline-offset-2 hover:text-on-ink">{t.legal.privacy.toLowerCase()}</a>.
+    </p>
     <div data-form-status hidden role="status" class="rounded-card px-4 py-3 text-[15px] font-medium"></div>
     <template data-form-success>{f.success}</template>
+    <template data-form-invalid>{f.invalid}</template>
+    <template data-form-limited>
+      {f.tooMany}{' '}
+      <a href={links.tel} class="font-bold underline">{facts.phone}</a> · <a href={links.mail} class="font-bold underline">{facts.email}</a>
+    </template>
     <template data-form-failed>
       {f.failed}{' '}
       <a href={links.tel} class="font-bold underline">{facts.phone}</a> · <a href={links.mail} class="font-bold underline">{facts.email}</a>
@@ -120,7 +130,7 @@ const row = 'flex items-center gap-3 text-[16px] text-on-ink transition-colors h
   document.querySelectorAll<HTMLFormElement>('[data-contact-form]').forEach((form) => {
     const button = form.querySelector<HTMLButtonElement>('button[type="submit"]');
     const status = form.querySelector<HTMLElement>('[data-form-status]');
-    const show = (kind: 'success' | 'failed') => {
+    const show = (kind: 'success' | 'invalid' | 'limited' | 'failed') => {
       const template = form.querySelector<HTMLTemplateElement>(`[data-form-${kind}]`);
       if (!status || !template) return;
       status.replaceChildren(template.content.cloneNode(true));
@@ -133,21 +143,25 @@ const row = 'flex items-center gap-3 text-[16px] text-on-ink transition-colors h
       if (!button) return;
       button.disabled = true;
       button.textContent = button.dataset.sending ?? '';
-      let delivered = false;
+      // Only a confirmed delivery shows "thank you"; anything else offers phone/e-mail.
+      let result: 'success' | 'invalid' | 'limited' | 'failed' = 'failed';
       try {
         const response = await fetch(form.action, {
           method: 'POST',
           body: new FormData(form),
           headers: { Accept: 'application/json' },
         });
-        delivered = response.ok && (await response.json()).ok === true;
+        const data = await response.json().catch(() => ({}));
+        if (response.ok && data.ok === true) result = 'success';
+        else if (data.error === 'invalid') result = 'invalid';
+        else if (data.error === 'rate-limited') result = 'limited';
       } catch {
-        delivered = false;
+        result = 'failed';
       }
       button.disabled = false;
       button.textContent = button.dataset.label ?? '';
-      show(delivered ? 'success' : 'failed');
-      if (delivered) form.reset();
+      show(result);
+      if (result === 'success') form.reset();
     });
   });
 </script>

@@ -6,8 +6,13 @@ import { defineCollection } from 'astro:content';
 import { glob } from 'astro/loaders';
 import { z } from 'astro/zod';
 
+// Entry id = file path without .json ("nl/dienst-1"). Set explicitly: by default
+// the glob loader takes a `slug` field from the data as the id, which would drop
+// the language folder and make the entry vanish from its language.
+const generateId = ({ entry }: { entry: string }) => entry.replace(/\.json$/, '');
+
 const services = defineCollection({
-  loader: glob({ pattern: '*/*.json', base: './src/content/services' }),
+  loader: glob({ pattern: '*/*.json', base: './src/content/services', generateId }),
   schema: z.object({
     order: z.number(),
     // Lucide icon name (lucide.dev/icons, e.g. "hammer"), or "custom:<file>"
@@ -20,23 +25,26 @@ const services = defineCollection({
     image: z.string().nullable(),
     imageAlt: z.string(),
     body: z.array(z.string()),
+    // Date of the last real change (sitemap lastmod), optional.
+    updated: z.string().regex(/^\d{4}-\d{2}-\d{2}$/).optional(),
   }),
 });
 
 // A region gets its own page only when it has real, distinct body text —
 // templated city pages hurt SEO. Without body it is only listed by name.
 const regions = defineCollection({
-  loader: glob({ pattern: '*/*.json', base: './src/content/regions' }),
+  loader: glob({ pattern: '*/*.json', base: './src/content/regions', generateId }),
   schema: z.object({
     order: z.number(),
     name: z.string(),
     slug: z.string().optional(),
     body: z.array(z.string()),
+    updated: z.string().regex(/^\d{4}-\d{2}-\d{2}$/).optional(),
   }),
 });
 
 const gallery = defineCollection({
-  loader: glob({ pattern: '*/*.json', base: './src/content/gallery' }),
+  loader: glob({ pattern: '*/*.json', base: './src/content/gallery', generateId }),
   schema: z.object({
     order: z.number(),
     title: z.string(),
@@ -49,7 +57,7 @@ const gallery = defineCollection({
 
 // Only real reviews, copied word for word, with the source.
 const reviews = defineCollection({
-  loader: glob({ pattern: '*.json', base: './src/content/reviews' }),
+  loader: glob({ pattern: '*.json', base: './src/content/reviews', generateId }),
   schema: z.object({
     order: z.number(),
     author: z.string(),

@@ -12,14 +12,21 @@ import WhyUs from '../components/sections/WhyUs.astro';
 import Reviews from '../components/sections/Reviews.astro';
 import Faq from '../components/sections/Faq.astro';
 import Contact from '../components/sections/Contact.astro';
-import { defaultLang, facts, getContent, sectionVariant } from '../lib/site';
+import { facts, getContent, sectionVariant } from '../lib/site';
 import { getGallery, getReviews, getServices } from '../lib/collections';
 import { tonesFor, visibleSections } from '../lib/sections';
+import { faqPage } from '../lib/jsonld';
 import { themeFor } from '../lib/theme';
-import { HERO_VARIANTS } from '../lib/schema';
+import { HERO_VARIANTS, type Lang } from '../lib/schema';
+import type { PageRoute } from '../lib/routes';
 import { ui } from '../i18n/ui';
 
-const lang = defaultLang;
+interface Props {
+  route: PageRoute;
+  alternates: { lang: Lang; path: string }[];
+}
+const { route, alternates } = Astro.props;
+const lang = route.lang;
 const t = ui(lang);
 const content = getContent(lang);
 const sections = await visibleSections(lang);
@@ -31,9 +38,10 @@ if (!(HERO_VARIANTS as readonly string[]).includes(heroVariantRaw)) {
   throw new Error(`sections.json: hero.variant "${heroVariantRaw}" — expected one of ${HERO_VARIANTS.join(', ')}`);
 }
 const heroVariant = heroVariantRaw as (typeof HERO_VARIANTS)[number];
+const jsonLd = sections.includes('faq') ? [faqPage(content.faq.items)] : [];
 ---
 
-<BaseLayout title={content.meta.title} description={content.meta.description}>
+<BaseLayout lang={lang} title={content.meta.title} description={content.meta.description} path={route.path} alternates={alternates} jsonLd={jsonLd}>
   {
     sections.map((id) => {
       switch (id) {
@@ -42,7 +50,7 @@ const heroVariant = heroVariantRaw as (typeof HERO_VARIANTS)[number];
         case 'trust':
           return <Trust t={t} content={content.trust} tone={tones.trust} />;
         case 'services':
-          return <Services t={t} content={content.services} services={services} tone={tones.services} />;
+          return <Services t={t} lang={lang} content={content.services} services={services} tone={tones.services} />;
         case 'about':
           return <About t={t} content={content.about} tone={tones.about} />;
         case 'process':
@@ -56,7 +64,7 @@ const heroVariant = heroVariantRaw as (typeof HERO_VARIANTS)[number];
         case 'faq':
           return <Faq t={t} content={content.faq} tone={tones.faq} />;
         case 'contact':
-          return <Contact t={t} content={content.contact} services={services} />;
+          return <Contact t={t} lang={lang} content={content.contact} services={services} />;
       }
     })
   }

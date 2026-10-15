@@ -15,7 +15,7 @@
 | Bilto (`D:\IT\IT Projects\bilto`) | Основа архитектуры: Astro 7 + Tailwind v4, секции-компоненты, данные в `src/data/*`, Content Collections (услуги, регионы), согласие на cookies, SEO-компонент, анимации на CSS/IntersectionObserver, Lighthouse 95+ |
 | INGBELG (`D:\IT\IT Projects\ingbelg`) | `site-facts.json`, `LandingPage.astro` (одна посадочная = один файл данных), форма → Resend + CRM, `sitemap.xml` с реальными `lastmod`, юридические страницы |
 | A&T (`D:\IT\IT Projects\atprojects`) | Навык `visual-check` (Playwright, 4 ширины, overflow/битые картинки) |
-| ISV Labs (`isvlabs`) | `src/lib/notify-telegram.ts` — заявка с формы в Telegram |
+| ISV Labs (`isvlabs`) | Лимит заявок по IP (там SMTP; `notify-telegram.ts` в isvlabs нет — отправка в Telegram написана здесь, `src/lib/leads.ts`) |
 
 ## Правила проекта
 - Всё, что зависит от клиента (тексты, контакты, цвета, шрифты, фото, услуги, регионы, языки), — **только в данных и токенах темы**. В компонентах ни одного названия, телефона или цвета клиента.
@@ -30,24 +30,29 @@ Astro 7.3 + Tailwind v4 (`@tailwindcss/vite`) + TypeScript 6 (не 7 — `astro 
 
 | Что | Где |
 |---|---|
-| **Данные клиента** (всё, что меняется для нового сайта) | `src/data/site-facts.json` (факты, `style`, `brand`, `languages`, `launched`, `demo`), `src/data/sections.json` (порядок/вкл/варианты секций), `src/data/content/<lang>.json` (тексты главной) |
-| Коллекции (JSON на элемент, тексты в папке языка) | `src/content/{services,regions,gallery}/<lang>/*.json`, `src/content/reviews/*.json`; схемы — `src/content.config.ts` |
+| **Данные клиента** (всё, что меняется для нового сайта) | `src/data/site-facts.json` (факты без языка: контакты, часы, `geo`, `schemaType`, `style`, `brand`, `languages`, `launched`, `demo`, `privacy`), `src/data/sections.json` (порядок/вкл/варианты секций), `src/data/content/<lang>.json` (тексты главной, в т.ч. `about.stats`, `contact.responseTime`, `meta.updated`) — файл на каждый язык из `languages` |
+| Коллекции (JSON на элемент, тексты в папке языка) | `src/content/{services,regions,gallery}/<lang>/*.json`, `src/content/reviews/*.json`; схемы — `src/content.config.ts` (id = путь файла через `generateId`, иначе поле `slug` подменяет id). Одно имя файла в разных языках = перевод (hreflang) |
 | Фото и свои иконки | `src/assets/images/…` (в данных — путь внутри папки, неверный путь = ошибка сборки), `src/assets/icons/<имя>.svg` → `"icon": "custom:<имя>"` |
 | Проверка данных (Zod 4 из `astro/zod`) | `src/lib/schema.ts`, загрузка — `src/lib/site.ts` (ошибка в данных = понятное сообщение при сборке) |
 | Стили `strict` / `warm` / `modern` + цвета бренда | `src/lib/theme.ts` (пресеты, авто-контраст: текст на кнопке, затемнённый акцент для текста); `global.css` `@theme` только даёт им имена Tailwind (`bg-primary`, `text-muted`, `rounded-card`…) |
 | Какие секции видны (вкл + есть данные) и чередование фонов | `src/lib/sections.ts`; меню шапки/подвала строятся из того же списка |
-| Строки интерфейса шаблона (кнопки, форма, cookies, якоря) | `src/i18n/ui.ts` (пока только `nl`) |
+| Строки интерфейса шаблона (кнопки, форма, cookies, якоря, сегменты URL) | `src/i18n/ui.ts` — `nl`, `fr`, `en`, `ru` |
+| Privacy / cookie-политика (4 языка, из фактов и `privacy.processors`) | `src/i18n/legal.ts`; страница — `src/views/LegalPage.astro`; «черновик», пока `privacy.updated` = null |
+| **Таблица всех страниц** (адреса, языки, hreflang, sitemap) | `src/lib/routes.ts`; основной язык в корне, остальные — `/<lang>/…`; конфликт адресов = ошибка сборки |
+| JSON-LD (LocalBusiness/`schemaType`, FAQPage, BreadcrumbList, Service; без `[ЗАПОЛНИТЬ]` и без AggregateRating) | `src/lib/jsonld.ts` |
+| Форма → Resend + Telegram + Odoo (по желанию) | `src/lib/leads.ts` (проверка, лимит 5/10 мин на IP, каналы), `src/pages/api/contact.ts`; переменные — `.env.example`. «Спасибо» только при подтверждённой доставке |
 | Иконки | `src/components/Icon.astro`: любая Lucide по имени (lucide.dev/icons), бренды whatsapp/facebook/instagram/tiktok (simple-icons; LinkedIn там нет), `custom:` |
 | Фото/заглушка | `src/components/Img.astro` (WebP, srcset, без апскейла; без фото — узорная заглушка той же пропорции) |
 | Секции главной | `src/components/sections/*` (Hero `split`/`cover`, Trust, Services, About, Process, Gallery, WhyUs, Reviews, Faq, Contact); шапка/подвал/топбар/мобильная панель — `src/components/layout/*` |
-| Страницы | `index.astro` (из sections.json), `[slug].astro` (услуги), `[region]/[slug].astro` (только регионы с `body`), `404.astro`, `robots.txt.ts`, `api/contact.ts` (**заглушка**, всегда «не доставлено» — этап 2) |
+| Страницы | один маршрут `src/pages/[...path].astro` → `src/views/{Home,Service,Region,Legal}Page.astro`; `404.astro`, `robots.txt.ts`, `sitemap.xml.ts` (без юр. страниц, `lastmod` только из `updated`) |
 | Reveal, шапка, меню | `src/scripts/reveal.ts` (+ CSS в `global.css`); cookies — `CookieBanner.astro` + `src/scripts/consent.ts` (баннер только если есть карта, т.е. `showAddress`) |
 | noindex превью | `facts.launched` (meta + robots), `vercel.json` (`X-Robots-Tag` на `*.vercel.app`) |
-| Визуальная проверка | навык `.claude/skills/visual-check/` (serve на **4324**, shoot, split) |
+| Визуальная проверка | навык `.claude/skills/visual-check/` (serve на **4324**, shoot — ловит и вылезающий текст, split) |
 
 ## Рабочий цикл
 Правка → `npm run build` → `visual-check` (4 ширины) → git add только затронутых → commit.
 
-## ▶ Текущий статус (2026-10-12)
-**Сделано:** этап 1 — каркас, данные-заглушки, 3 стиля, visual-check. Проверено: 3 стиля × 4 ширины без переполнения; Lighthouse mobile (локально, без сжатия) perf 96–97, a11y 100, BP 100, SEO 66 только из-за намеренного `noindex`. Подробности — `.claude/notes/stage-1.md`.
-**Дальше:** этап 2 из PLAN.md (форма → Resend + Telegram, юр. страницы, schema.org, sitemap, многоязычность).
+## ▶ Текущий статус (2026-10-15)
+**Сделано:** этап 1 (каркас, 3 стиля) и этап 2 (форма, юр. страницы, SEO, 4 языка). Подробности — `.claude/notes/stage-1.md`, `.claude/notes/stage-2.md`.
+**Дальше:** этап 3 из PLAN.md (`client.schema.json` + `npm run apply-client`, `new-site`).
+**Не проверено:** реальная доставка формы (нужны ключи Resend/Telegram на тестовом проекте Vercel).

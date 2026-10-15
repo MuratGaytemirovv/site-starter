@@ -1,0 +1,32 @@
+---
+// Every page of the site, in every language, from the route table in
+// src/lib/routes.ts (home, services, regions with text, privacy, cookies).
+import HomePage from '../views/HomePage.astro';
+import ServicePage from '../views/ServicePage.astro';
+import RegionPage from '../views/RegionPage.astro';
+import LegalPage from '../views/LegalPage.astro';
+import { allRoutes, alternatesOf, type PageRoute } from '../lib/routes';
+import type { Lang } from '../lib/schema';
+
+export async function getStaticPaths() {
+  const routes = await allRoutes();
+  return Promise.all(
+    routes.map(async (route) => ({
+      // "/" → undefined (site root), "/fr/" → "fr", "/fr/dienst" → "fr/dienst"
+      params: { path: route.path.replace(/^\/|\/$/g, '') || undefined },
+      props: { route, alternates: await alternatesOf(route) },
+    })),
+  );
+}
+
+interface Props {
+  route: PageRoute;
+  alternates: { lang: Lang; path: string }[];
+}
+const { route, alternates } = Astro.props;
+---
+
+{route.kind === 'home' && <HomePage route={route} alternates={alternates} />}
+{route.kind === 'service' && <ServicePage route={route} alternates={alternates} />}
+{route.kind === 'region' && <RegionPage route={route} alternates={alternates} />}
+{(route.kind === 'privacy' || route.kind === 'cookies') && <LegalPage route={route} alternates={alternates} />}

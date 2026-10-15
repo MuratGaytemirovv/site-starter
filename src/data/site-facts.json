@@ -23,9 +23,8 @@
   "showAddress": true,
 
   "openingHours": [],
-  "responseTime": "[ЗАПОЛНИТЬ] Antwoord binnen 1 werkdag",
+  "geo": null,
 
-  "stats": [],
   "reviews": {
     "score": null,
     "count": null,
@@ -38,6 +37,8 @@
   },
 
   "logo": null,
+  "ogImage": null,
+  "schemaType": "LocalBusiness",
   "style": "strict",
   "brand": {
     "primary": null,
@@ -47,5 +48,10 @@
   "languages": ["nl"],
   "siteUrl": "https://example.com",
   "launched": false,
-  "demo": true
+  "demo": true,
+
+  "privacy": {
+    "updated": null,
+    "processors": ["vercel", "resend", "telegram"]
+  }
 }

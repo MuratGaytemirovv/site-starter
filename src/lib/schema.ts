@@ -17,6 +17,9 @@ export const SECTION_IDS = [
   'contact',
 ] as const;
 export const HERO_VARIANTS = ['split', 'cover'] as const;
+// Services that may receive personal data; each has a paragraph in the privacy policy.
+export const PROCESSORS = ['vercel', 'resend', 'telegram', 'odoo', 'whatsapp', 'accountant'] as const;
+export const isoDate = z.string().regex(/^\d{4}-\d{2}-\d{2}$/, 'expected YYYY-MM-DD');
 
 const hex = z.string().regex(/^#[0-9a-fA-F]{6}$/, 'expected a colour like #1f4e8c');
 const dayNames = z.enum(['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday']);
@@ -43,13 +46,11 @@ export const factsSchema = z.object({
   }),
   showAddress: z.boolean(),
 
-  openingHours: z.array(
-    z.object({ label: z.string(), days: z.array(dayNames).min(1), opens: time, closes: time }),
-  ),
-  responseTime: z.string().nullable(),
+  // Language-neutral: the day labels come from the interface strings.
+  openingHours: z.array(z.object({ days: z.array(dayNames).min(1), opens: time, closes: time })),
+  // Optional coordinates for the LocalBusiness schema (from Google Maps).
+  geo: z.object({ lat: z.number(), lng: z.number() }).nullable(),
 
-  // Only confirmed numbers. value is shown as written ("400+", "15 jaar").
-  stats: z.array(z.object({ value: z.string(), label: z.string() })),
   reviews: z.object({
     score: z.string().nullable(),
     count: z.number().int().nullable(),
@@ -63,6 +64,11 @@ export const factsSchema = z.object({
 
   // Path inside src/assets/images/ (svg/png/webp), or null for a text logo.
   logo: z.string().nullable(),
+  // Share image (path in src/assets/images/); null = the hero photo, if any.
+  ogImage: z.string().nullable(),
+  // schema.org type: LocalBusiness or a more specific one (RoofingContractor,
+  // Plumber, HairSalon, HomeAndConstructionBusiness … — see schema.org/LocalBusiness).
+  schemaType: z.string().regex(/^[A-Z][A-Za-z]+$/, 'expected a schema.org type like LocalBusiness'),
   style: z.enum(STYLES),
   brand: z.object({ primary: hex.nullable(), ink: hex.nullable() }),
 
@@ -70,6 +76,13 @@ export const factsSchema = z.object({
   siteUrl: z.url(),
   launched: z.boolean(),
   demo: z.boolean(),
+
+  // Privacy policy: date of the last change and the services that receive
+  // personal data (listed in the policy). Show the text to a lawyer before launch.
+  privacy: z.object({
+    updated: isoDate.nullable(),
+    processors: z.array(z.enum(PROCESSORS)),
+  }),
 });
 
 export const sectionsSchema = z.object({
@@ -87,7 +100,8 @@ const image = z.string().nullable();
 const cta = z.string().min(1);
 
 export const contentSchema = z.object({
-  meta: z.object({ title: z.string().min(1), description: z.string().min(1) }),
+  // updated = date of the last real content change (sitemap lastmod), optional.
+  meta: z.object({ title: z.string().min(1), description: z.string().min(1), updated: isoDate.optional() }),
   hero: z.object({
     eyebrow: z.string(),
     title: z.string().min(1),
@@ -106,6 +120,8 @@ export const contentSchema = z.object({
     eyebrow: z.string(),
     title: z.string(),
     paragraphs: z.array(z.string()),
+    // Only confirmed numbers; value is shown as written ("400+", "15 jaar").
+    stats: z.array(z.object({ value: z.string(), label: z.string() })),
     image,
     imageAlt: z.string(),
   }),
@@ -126,7 +142,7 @@ export const contentSchema = z.object({
     title: z.string(),
     items: z.array(z.object({ q: z.string(), a: z.string() })),
   }),
-  contact: z.object({ eyebrow: z.string(), title: z.string(), text: z.string() }),
+  contact: z.object({ eyebrow: z.string(), title: z.string(), text: z.string(), responseTime: z.string() }),
   footer: z.object({ tagline: z.string() }),
 });
 

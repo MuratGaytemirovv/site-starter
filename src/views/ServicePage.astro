@@ -1,31 +1,51 @@
 ---
-// Service pages: /<slug> for every item in src/content/services/<lang>/.
+// One service: /<slug> (main language) or /<lang>/<slug>.
 import BaseLayout from '../layouts/BaseLayout.astro';
+import Breadcrumbs from '../components/Breadcrumbs.astro';
 import Container from '../components/Container.astro';
 import Icon from '../components/Icon.astro';
 import Img from '../components/Img.astro';
 import Button from '../components/Button.astro';
-import { defaultLang, facts } from '../lib/site';
-import { getServices, type Service } from '../lib/collections';
+import { facts, isPlaceholder } from '../lib/site';
+import { getRegions, getServices } from '../lib/collections';
+import { homePath, sectionHref, servicePath, type PageRoute } from '../lib/routes';
+import { breadcrumbList, service as serviceLd } from '../lib/jsonld';
+import type { Lang } from '../lib/schema';
 import { ui } from '../i18n/ui';
 
-export async function getStaticPaths() {
-  const services = await getServices(defaultLang);
-  return services.map((service) => ({
-    params: { slug: service.slug },
-    props: { service, others: services.filter((s) => s.key !== service.key) },
-  }));
-}
-
 interface Props {
-  service: Service;
-  others: Service[];
+  route: PageRoute;
+  alternates: { lang: Lang; path: string }[];
 }
-const { service, others } = Astro.props;
-const t = ui(defaultLang);
+const { route, alternates } = Astro.props;
+const lang = route.lang;
+const t = ui(lang);
+const services = await getServices(lang);
+const service = services.find((s) => s.key === route.key)!;
+const others = services.filter((s) => s.key !== service.key);
+const areaServed = (await getRegions(lang)).map((r) => r.name).filter((n) => !isPlaceholder(n));
+
+const crumbs = [
+  { name: t.nav.homeCrumb, path: homePath(lang) },
+  { name: service.title, path: route.path },
+];
+const site = Astro.site!;
+const jsonLd = [
+  breadcrumbList(site, crumbs),
+  serviceLd(site, { name: service.title, description: service.summary, path: route.path, areaServed }),
+];
 ---
 
-<BaseLayout title={`${service.title} — ${facts.name}`} description={service.summary}>
+<BaseLayout
+  lang={lang}
+  title={`${service.title} — ${facts.name}`}
+  description={service.summary}
+  path={route.path}
+  alternates={alternates}
+  image={service.image}
+  jsonLd={jsonLd}
+>
+  <Breadcrumbs t={t} crumbs={crumbs} />
   <section class="bg-surface py-12 lg:py-20">
     <Container class="grid grid-cols-1 items-center gap-10 nav:grid-cols-2 lg:gap-16">
       <div class="flex flex-col gap-5">
@@ -35,7 +55,7 @@ const t = ui(defaultLang);
         <h1 class="text-[34px] leading-[1.1] lg:text-[50px]">{service.title}</h1>
         <p class="max-w-xl text-[18px] leading-relaxed text-muted">{service.summary}</p>
         <div class="flex flex-wrap gap-3">
-          <Button href={`/#${t.sections.contact.anchor}`} size="lg" iconEnd="arrow-right">{t.cta.quote}</Button>
+          <Button href={sectionHref(lang, 'contact')} size="lg" iconEnd="arrow-right">{t.cta.quote}</Button>
         </div>
       </div>
       <div class="overflow-hidden rounded-card">
@@ -56,7 +76,7 @@ const t = ui(defaultLang);
             <ul class="mt-4 flex flex-col border-t border-line">
               {others.map((s) => (
                 <li class="border-b border-line">
-                  <a href={`/${s.slug}`} class="group flex items-center justify-between gap-3 py-4 font-semibold text-heading">
+                  <a href={servicePath(lang, s.slug)} class="group flex items-center justify-between gap-3 py-4 font-semibold text-heading">
                     <span class="flex items-center gap-3">
                       <Icon name={s.icon} class="h-5 w-5 shrink-0 text-primary-text" />
                       {s.title}

@@ -2,24 +2,27 @@
 import Container from '../Container.astro';
 import Icon from '../Icon.astro';
 import Logo from '../Logo.astro';
-import { addressLine, defaultLang, facts, getContent, links } from '../../lib/site';
+import { addressLine, facts, getContent, links } from '../../lib/site';
 import { getRegions, getServices } from '../../lib/collections';
-import type { SectionId } from '../../lib/schema';
+import { homePath, legalPath, regionPath, sectionHref, servicePath } from '../../lib/routes';
+import { formatHours } from '../../lib/hours';
+import type { Lang, SectionId } from '../../lib/schema';
 import type { UI } from '../../i18n/ui';
 
 interface Props {
   t: UI;
+  lang: Lang;
   sections: SectionId[];
 }
-const { t, sections } = Astro.props;
+const { t, lang, sections } = Astro.props;
 
-const lang = defaultLang;
 const content = getContent(lang);
 const services = sections.includes('services') ? await getServices(lang) : [];
 const regions = await getRegions(lang);
 const companyNav = sections.filter((id) => !['hero', 'trust', 'services'].includes(id) && t.sections[id].nav);
 const social = Object.entries(facts.social).filter((entry): entry is [string, string] => !!entry[1]);
 const year = new Date().getFullYear();
+const hours = formatHours(facts.openingHours, t);
 
 const heading = 'font-heading text-[13px] font-semibold uppercase tracking-[0.12em] text-primary-on-ink';
 const link = 'text-[15px] text-on-ink-muted transition-colors hover:text-on-ink';
@@ -30,7 +33,7 @@ const mapSrc = `https://maps.google.com/maps?q=${encodeURIComponent(`${addressLi
   <Container class="py-section lg:py-20">
     <div class="grid grid-cols-1 gap-12 sm:grid-cols-2 lg:grid-cols-[1.2fr_1fr_1fr_1.3fr]">
       <div>
-        <a href="/" aria-label={`${facts.name} — ${t.nav.home}`}><Logo tone="dark" /></a>
+        <a href={homePath(lang)} aria-label={`${facts.name} — ${t.nav.home}`}><Logo tone="dark" /></a>
         <p class="mt-4 max-w-[280px] text-[15px] leading-relaxed text-on-ink-muted">{content.footer.tagline}</p>
         {
           social.length > 0 && (
@@ -54,7 +57,7 @@ const mapSrc = `https://maps.google.com/maps?q=${encodeURIComponent(`${addressLi
             <p class={heading}>{t.footer.services}</p>
             <ul class="mt-4 flex flex-col gap-3">
               {services.map((s) => (
-                <li><a href={`/${s.slug}`} class={link}>{s.title}</a></li>
+                <li><a href={servicePath(lang, s.slug)} class={link}>{s.title}</a></li>
               ))}
             </ul>
           </div>
@@ -67,7 +70,7 @@ const mapSrc = `https://maps.google.com/maps?q=${encodeURIComponent(`${addressLi
             <p class={heading}>{t.footer.company}</p>
             <ul class="mt-4 flex flex-col gap-3">
               {companyNav.map((id) => (
-                <li><a href={`/#${t.sections[id].anchor}`} class={link}>{t.sections[id].nav}</a></li>
+                <li><a href={sectionHref(lang, id)} class={link}>{t.sections[id].nav}</a></li>
               ))}
             </ul>
           </div>
@@ -92,12 +95,12 @@ const mapSrc = `https://maps.google.com/maps?q=${encodeURIComponent(`${addressLi
           }
         </ul>
         {
-          facts.openingHours.length > 0 && (
-            <dl class="mt-5 grid grid-cols-[auto_1fr] gap-x-4 gap-y-1 text-[14px] text-on-ink-muted">
-              {facts.openingHours.map((h) => (
+          hours.length > 0 && (
+            <dl class="mt-5 grid grid-cols-[auto_1fr] gap-x-4 gap-y-1 text-[14px] text-on-ink-muted" aria-label={t.contact.hours}>
+              {hours.map((h) => (
                 <>
-                  <dt>{h.label}</dt>
-                  <dd>{h.opens}–{h.closes}</dd>
+                  <dt>{h.days}</dt>
+                  <dd>{h.time}</dd>
                 </>
               ))}
             </dl>
@@ -136,7 +139,7 @@ const mapSrc = `https://maps.google.com/maps?q=${encodeURIComponent(`${addressLi
           <p class="text-[13px] font-semibold uppercase tracking-[0.12em] text-on-ink-muted">{t.regions.activeIn}</p>
           <ul class="flex flex-wrap gap-x-6 gap-y-2 text-[14px] text-on-ink-muted">
             {regions.map((r) => (
-              <li>{r.hasPage ? <a href={`/${t.routes.region}/${r.slug}`} class="hover:text-on-ink">{r.name}</a> : r.name}</li>
+              <li>{r.hasPage ? <a href={regionPath(lang, r.slug)} class="hover:text-on-ink">{r.name}</a> : r.name}</li>
             ))}
           </ul>
         </div>
@@ -145,13 +148,19 @@ const mapSrc = `https://maps.google.com/maps?q=${encodeURIComponent(`${addressLi
 
     <div class="mt-8 flex flex-col gap-3 border-t border-ink-line pt-6 text-[14px] text-on-ink-muted sm:flex-row sm:items-center sm:justify-between">
       <p>© {year} {facts.legalName}{facts.vat && ` · ${t.contact.vat} ${facts.vat}`}</p>
-      {
-        facts.showAddress && (
-          <button type="button" data-cookie-reopen class="self-start underline-offset-4 hover:text-on-ink hover:underline">
-            {t.footer.cookieSettings}
-          </button>
-        )
-      }
+      <ul class="flex flex-wrap gap-x-6 gap-y-2">
+        <li><a href={legalPath(lang, 'privacy')} class="underline-offset-4 hover:text-on-ink hover:underline">{t.legal.privacy}</a></li>
+        <li><a href={legalPath(lang, 'cookies')} class="underline-offset-4 hover:text-on-ink hover:underline">{t.legal.cookies}</a></li>
+        {
+          facts.showAddress && (
+            <li>
+              <button type="button" data-cookie-reopen class="underline-offset-4 hover:text-on-ink hover:underline">
+                {t.footer.cookieSettings}
+              </button>
+            </li>
+          )
+        }
+      </ul>
     </div>
   </Container>
 </footer>

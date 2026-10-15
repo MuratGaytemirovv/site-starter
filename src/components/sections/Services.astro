@@ -5,18 +5,20 @@ import Section from '../Section.astro';
 import SectionHeading from '../SectionHeading.astro';
 import Icon from '../Icon.astro';
 import Img from '../Img.astro';
-import type { Content } from '../../lib/schema';
+import { servicePath } from '../../lib/routes';
+import type { Content, Lang } from '../../lib/schema';
 import type { Service } from '../../lib/collections';
 import type { Tone } from '../../lib/sections';
 import type { UI } from '../../i18n/ui';
 
 interface Props {
   t: UI;
+  lang: Lang;
   content: Content['services'];
   services: Service[];
   tone: Tone;
 }
-const { t, content, services, tone } = Astro.props;
+const { t, lang, content, services, tone } = Astro.props;
 const withPhotos = services.some((s) => s.image);
 const cols = services.length % 3 === 0 || services.length > 4 ? 'lg:grid-cols-3' : 'lg:grid-cols-2';
 const card = tone === 'alt' ? 'bg-bg' : 'bg-surface';
@@ -28,7 +30,7 @@ const card = tone === 'alt' ? 'bg-bg' : 'bg-surface';
     {
       services.map((s) => (
         <a
-          href={`/${s.slug}`}
+          href={servicePath(lang, s.slug)}
           data-reveal
           class:list={[
             'group flex flex-col overflow-hidden rounded-card border border-line transition-[translate,box-shadow,border-color] duration-200 hover:-translate-y-1 hover:border-primary hover:shadow-[0_18px_36px_-18px_rgb(0_0_0/0.25)]',

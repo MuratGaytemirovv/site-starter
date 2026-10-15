@@ -1,0 +1,48 @@
+---
+// A region with its own text: /<regio>/<slug>. Regions without text are only
+// listed by name in the footer — copy-paste city pages hurt SEO.
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Breadcrumbs from '../components/Breadcrumbs.astro';
+import Container from '../components/Container.astro';
+import Button from '../components/Button.astro';
+import { facts } from '../lib/site';
+import { getRegions } from '../lib/collections';
+import { homePath, sectionHref, type PageRoute } from '../lib/routes';
+import { breadcrumbList } from '../lib/jsonld';
+import type { Lang } from '../lib/schema';
+import { ui } from '../i18n/ui';
+
+interface Props {
+  route: PageRoute;
+  alternates: { lang: Lang; path: string }[];
+}
+const { route, alternates } = Astro.props;
+const lang = route.lang;
+const t = ui(lang);
+const region = (await getRegions(lang)).find((r) => r.key === route.key)!;
+const title = t.regions.title(region.name);
+const crumbs = [
+  { name: t.nav.homeCrumb, path: homePath(lang) },
+  { name: region.name, path: route.path },
+];
+---
+
+<BaseLayout
+  lang={lang}
+  title={`${title} — ${facts.name}`}
+  description={region.body[0].slice(0, 155)}
+  path={route.path}
+  alternates={alternates}
+  jsonLd={[breadcrumbList(Astro.site!, crumbs)]}
+>
+  <Breadcrumbs t={t} crumbs={crumbs} />
+  <section class="py-section lg:py-section-lg">
+    <Container class="max-w-3xl">
+      <h1 class="text-[34px] leading-[1.1] lg:text-[48px]">{title}</h1>
+      <div class="mt-6 flex flex-col gap-5 text-[17px] leading-relaxed lg:text-[18px]">
+        {region.body.map((p) => <p>{p}</p>)}
+      </div>
+      <Button href={sectionHref(lang, 'contact')} size="lg" iconEnd="arrow-right" class="mt-8">{t.cta.quote}</Button>
+    </Container>
+  </section>
+</BaseLayout>

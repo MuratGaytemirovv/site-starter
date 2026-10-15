@@ -3,18 +3,20 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 import Container from '../components/Container.astro';
 import Button from '../components/Button.astro';
 import { defaultLang, facts } from '../lib/site';
+import { homePath } from '../lib/routes';
 import { ui } from '../i18n/ui';
 
-const t = ui(defaultLang);
+const lang = defaultLang;
+const t = ui(lang);
 ---
 
-<BaseLayout title={`${t.notFound.title} — ${facts.name}`} description={t.notFound.text} noindex>
+<BaseLayout lang={lang} title={`${t.notFound.title} — ${facts.name}`} description={t.notFound.text} path="/404" noindex>
   <section class="py-section lg:py-section-lg">
     <Container class="flex max-w-2xl flex-col items-start gap-6">
       <p class="font-heading text-[64px] font-extrabold leading-none text-primary-text">404</p>
       <h1 class="text-[32px] leading-tight lg:text-[44px]">{t.notFound.title}</h1>
       <p class="text-[18px] leading-relaxed text-muted">{t.notFound.text}</p>
-      <Button href="/" size="lg">{t.cta.back}</Button>
+      <Button href={homePath(lang)} size="lg">{t.cta.back}</Button>
     </Container>
   </section>
 </BaseLayout>

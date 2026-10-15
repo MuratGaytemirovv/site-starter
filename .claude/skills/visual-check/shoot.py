@@ -31,6 +31,15 @@ WIDE = """() => {
     if (cs.visibility === 'hidden' || el.closest('[hidden], #mobile-menu, .sr-only')) continue;
     out.push(`${el.tagName.toLowerCase()}${el.id ? '#' + el.id : ''}.${[...el.classList].slice(0, 3).join('.')} +${Math.round(r.right - vw)}px`);
   }
+  // Text that sticks out (a long URL or compound word) is not an element of its own.
+  const walker = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT);
+  const range = document.createRange();
+  for (let n = walker.nextNode(); n && out.length < 6; n = walker.nextNode()) {
+    if (!n.textContent.trim() || n.parentElement.closest('[hidden], #mobile-menu, .sr-only')) continue;
+    range.selectNodeContents(n);
+    const r = range.getBoundingClientRect();
+    if (r.width && r.right > vw + 1) out.push(`text "${n.textContent.trim().slice(0, 40)}" +${Math.round(r.right - vw)}px`);
+  }
   return out.slice(0, 6);
 }"""
 

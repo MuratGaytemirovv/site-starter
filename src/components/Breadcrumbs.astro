@@ -1,0 +1,32 @@
+---
+// Visible breadcrumb trail; the same crumbs go into BreadcrumbList JSON-LD
+// (built by the page from the same array).
+import Container from './Container.astro';
+import Icon from './Icon.astro';
+import type { UI } from '../i18n/ui';
+
+interface Props {
+  t: UI;
+  crumbs: { name: string; path: string }[];
+}
+const { t, crumbs } = Astro.props;
+---
+
+<nav aria-label={t.nav.breadcrumb} class="border-b border-line bg-bg">
+  <Container>
+    <ol class="flex flex-wrap items-center gap-x-2 gap-y-1 py-3 text-[14px] text-muted">
+      {
+        crumbs.map((c, i) => (
+          <li class="flex items-center gap-2">
+            {i > 0 && <Icon name="chevron-right" class="h-3.5 w-3.5 shrink-0" />}
+            {i < crumbs.length - 1 ? (
+              <a href={c.path} class="hover:text-heading hover:underline">{c.name}</a>
+            ) : (
+              <span aria-current="page" class="text-heading">{c.name}</span>
+            )}
+          </li>
+        ))
+      }
+    </ol>
+  </Container>
+</nav>

@@ -1,26 +1,40 @@
 ---
-// Meta tags. Until `launched: true` in site-facts.json every page is noindex
-// (preview domains also get X-Robots-Tag from vercel.json).
-import { facts } from '../lib/site';
+// Meta tags, canonical, hreflang. Until `launched: true` in site-facts.json
+// every page is noindex (preview domains also get X-Robots-Tag from vercel.json).
+import { defaultLang, facts } from '../lib/site';
+import type { Lang } from '../lib/schema';
 import type { UI } from '../i18n/ui';
 
 interface Props {
   title: string;
   description: string;
+  path: string;
+  alternates: { lang: Lang; path: string }[];
   image?: string;
   noindex?: boolean;
   t: UI;
 }
 
-const { title, description, image, noindex = false, t } = Astro.props;
-const canonical = new URL(Astro.url.pathname, Astro.site);
-const ogImage = image ? new URL(image, Astro.site) : null;
+const { title, description, path, alternates, image, noindex = false, t } = Astro.props;
+const abs = (p: string) => new URL(p, Astro.site).href;
+const canonical = abs(path);
+const xDefault = alternates.find((a) => a.lang === defaultLang);
 ---
 
 <title>{title}</title>
 <meta name="description" content={description} />
 <link rel="canonical" href={canonical} />
 {(noindex || !facts.launched) && <meta name="robots" content="noindex, nofollow" />}
+{
+  alternates.length > 1 && (
+    <>
+      {alternates.map((a) => (
+        <link rel="alternate" hreflang={a.lang} href={abs(a.path)} />
+      ))}
+      {xDefault && <link rel="alternate" hreflang="x-default" href={abs(xDefault.path)} />}
+    </>
+  )
+}
 
 <meta property="og:type" content="website" />
 <meta property="og:title" content={title} />
@@ -28,5 +42,7 @@ const ogImage = image ? new URL(image, Astro.site) : null;
 <meta property="og:url" content={canonical} />
 <meta property="og:locale" content={t.ogLocale} />
 <meta property="og:site_name" content={facts.name} />
-{ogImage && <meta property="og:image" content={ogImage} />}
-<meta name="twitter:card" content={ogImage ? 'summary_large_image' : 'summary'} />
+{image && <meta property="og:image" content={image} />}
+{image && <meta property="og:image:width" content="1200" />}
+{image && <meta property="og:image:height" content="630" />}
+<meta name="twitter:card" content={image ? 'summary_large_image' : 'summary'} />

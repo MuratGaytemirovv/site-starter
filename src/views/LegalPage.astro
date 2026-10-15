@@ -1,0 +1,72 @@
+---
+// Privacy and cookie policy (text in src/i18n/legal.ts). Not in the sitemap;
+// marked as a draft until site-facts.json → privacy.updated has a date
+// (= the client has seen the text).
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Breadcrumbs from '../components/Breadcrumbs.astro';
+import Container from '../components/Container.astro';
+import { addressLine, facts } from '../lib/site';
+import { visibleSections } from '../lib/sections';
+import { homePath, legalPath, type PageRoute } from '../lib/routes';
+import { breadcrumbList } from '../lib/jsonld';
+import type { Lang } from '../lib/schema';
+import { legalDoc } from '../i18n/legal';
+import { ui } from '../i18n/ui';
+
+interface Props {
+  route: PageRoute;
+  alternates: { lang: Lang; path: string }[];
+}
+const { route, alternates } = Astro.props;
+const lang = route.lang;
+const t = ui(lang);
+const kind = route.kind as 'privacy' | 'cookies';
+const site = Astro.site!;
+const doc = legalDoc(lang, kind, {
+  facts,
+  address: addressLine,
+  maps: facts.showAddress,
+  form: (await visibleSections(lang)).includes('contact'),
+  privacyHref: new URL(legalPath(lang, 'privacy'), site).href,
+  cookiesHref: new URL(legalPath(lang, 'cookies'), site).href,
+});
+const updated = facts.privacy.updated
+  ? new Date(`${facts.privacy.updated}T12:00:00Z`).toLocaleDateString(t.dateLocale, { day: 'numeric', month: 'long', year: 'numeric', timeZone: 'UTC' })
+  : null;
+const crumbs = [
+  { name: t.nav.homeCrumb, path: homePath(lang) },
+  { name: doc.title, path: route.path },
+];
+---
+
+<BaseLayout
+  lang={lang}
+  title={`${doc.title} — ${facts.name}`}
+  description={doc.intro}
+  path={route.path}
+  alternates={alternates}
+  jsonLd={[breadcrumbList(site, crumbs)]}
+>
+  <Breadcrumbs t={t} crumbs={crumbs} />
+  <section class="py-section lg:py-section-lg">
+    {/* Long addresses and URLs in legal text must wrap on a 320px phone. */}
+    <Container class="max-w-3xl [overflow-wrap:anywhere]">
+      <h1 class="text-[34px] leading-[1.1] lg:text-[46px]">{doc.title}</h1>
+      <p class="mt-3 text-[14px] text-muted">{updated ? `${t.legal.updated} ${updated}.` : t.legal.draft}</p>
+      <p class="mt-6 text-[17px] leading-relaxed">{doc.intro}</p>
+      {
+        doc.blocks.map((b) => (
+          <div class="mt-10">
+            <h2 class="text-[22px] leading-snug lg:text-[26px]">{b.h}</h2>
+            {b.p?.map((p) => <p class="mt-3 text-[16px] leading-relaxed">{p}</p>)}
+            {b.list && (
+              <ul class="mt-3 flex list-disc flex-col gap-2 pl-5 text-[16px] leading-relaxed marker:text-primary-text">
+                {b.list.map((li) => <li>{li}</li>)}
+              </ul>
+            )}
+          </div>
+        ))
+      }
+    </Container>
+  </section>
+</BaseLayout>

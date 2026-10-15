@@ -1,9 +1,8 @@
 ---
-// About: who is behind the business + confirmed numbers (site-facts → stats).
+// About: who is behind the business + confirmed numbers (content → about.stats).
 import Section from '../Section.astro';
 import SectionHeading from '../SectionHeading.astro';
 import Img from '../Img.astro';
-import { facts } from '../../lib/site';
 import type { Content } from '../../lib/schema';
 import type { Tone } from '../../lib/sections';
 import type { UI } from '../../i18n/ui';
@@ -29,9 +28,9 @@ const { t, content, tone } = Astro.props;
       {content.paragraphs.map((p) => <p class="text-[17px] leading-relaxed lg:text-[18px]">{p}</p>)}
     </div>
     {
-      facts.stats.length > 0 && (
+      content.stats.length > 0 && (
         <dl class="mt-8 grid grid-cols-2 gap-6 border-t border-line pt-6 sm:grid-cols-3" data-reveal>
-          {facts.stats.map((s) => (
+          {content.stats.map((s) => (
             <div>
               <dt class="sr-only">{s.label}</dt>
               <dd class="font-heading text-[32px] font-extrabold leading-none text-heading lg:text-[38px]">{s.value}</dd>
