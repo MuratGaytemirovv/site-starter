@@ -309,7 +309,8 @@ function write(files: Map<string, unknown>, languages: Lang[]) {
   for (const [file, value] of files) {
     const target = rel(file);
     const next = json(value);
-    if (fs.existsSync(target) && fs.readFileSync(target, 'utf8') === next) continue;
+    // CRLF from a Windows checkout (core.autocrlf) is not a change.
+    if (fs.existsSync(target) && fs.readFileSync(target, 'utf8').replaceAll('\r\n', '\n') === next) continue;
     fs.mkdirSync(path.dirname(target), { recursive: true });
     fs.writeFileSync(target, next);
     changed++;

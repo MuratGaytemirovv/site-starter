@@ -14,7 +14,7 @@ const schema = {
     'Everything for one local-business site. Only confirmed or publicly stated facts: unknown = null or leave the field out; never invent, never write [ЗАПОЛНИТЬ]. Apply with `npm run apply-client <file>`.',
 };
 const next = `${JSON.stringify(schema, null, 2)}\n`;
-if (!fs.existsSync(target) || fs.readFileSync(target, 'utf8') !== next) {
+if (!fs.existsSync(target) || fs.readFileSync(target, 'utf8').replaceAll('\r\n', '\n') !== next) {
   fs.writeFileSync(target, next);
   console.log('client-schema: client.schema.json updated');
 }
