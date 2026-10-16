@@ -1,0 +1,40 @@
+# Проверка демо/сайта клиента на каждый push в ветку demo/*.
+# Агент фермы читает результат через GitHub API (isv-demo-status): ошибки client.json
+# и сборки приходят аннотациями check-run «check-client» — без логов Vercel и без токена.
+name: check-client
+on:
+  push:
+    branches: ['demo/**']
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  check-client:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - run: npm ci --no-audit --no-fund
+      - name: build (client.json → данные → astro check → astro build)
+        shell: bash
+        run: |
+          set -o pipefail
+          if [ ! -f client.json ]; then echo "::error title=client.json::В корне ветки нет client.json"; exit 1; fi
+          if npm run build 2>&1 | tee build.log; then
+            echo "::notice title=OK::client.json и сборка без ошибок"
+            # отчёт «перед запуском не хватает / можно улучшить» — подсказкой, не ошибкой
+            node --experimental-strip-types --no-warnings scripts/apply-client.ts --check client.json 2>&1 \
+              | sed -n '/Можно улучшить/,$p' | grep -E '^\s+- ' | head -20 \
+              | while IFS= read -r l; do echo "::notice title=Можно улучшить::${l#*- }"; done || true
+          else
+            # строки «  - путь: ошибка» от apply-client и ошибки astro check/build
+            grep -E '^\s+- |error|Error' build.log | grep -v '^npm ' | head -30 \
+              | while IFS= read -r l; do echo "::error title=client.json/сборка::$(echo "$l" | sed 's/^[[:space:]]*- //')"; done
+            exit 1
+          fi
