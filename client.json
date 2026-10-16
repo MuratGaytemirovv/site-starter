@@ -1,0 +1,174 @@
+{
+  "$schema": "../client.schema.json",
+  "demo": true,
+  "launched": false,
+  "sources": [
+    { "what": "naam, familiebedrijf, Patrick Hechtermans, 'al een dertigtal jaren', werkwijze (bezoek, plan, kostenplaatje, offerte vrijblijvend), dakwerken/dakrenovatie/carports, lokaal gevestigd, foto's realisaties", "from": "https://www.dakren.be (home)", "date": "2026-10-16" },
+    { "what": "diensten: plat dak en hellend dak, nieuwbouw, herstellingen, onderhoud, dakbedekking, lekkages, dakpannen", "from": "https://www.dakren.be/Dakwerken-Sint-Truiden/", "date": "2026-10-16" },
+    { "what": "dakrenovatie: dakbedekking vervangen, lekkages, dakconstructie, isolatie; eerst inspectie, dan plan", "from": "https://www.dakren.be/Dakrenovaties-Sint-Truiden/", "date": "2026-10-16" },
+    { "what": "adres Teunisstraat 3, 3800 Zepperen (Sint-Truiden), telefoon 0475 56 71 50, e-mail dakren@telenet.be", "from": "https://www.dakren.be (footer)", "date": "2026-10-16" },
+    { "what": "BTW/KBO BE0792982918, rechtsvorm DAKREN bv", "from": "goudengids.be/bedrijf/Sint-Truiden/L11346035/DAKREN/ en firmo.be/en/0792982918/dakren", "date": "2026-10-16" },
+    { "what": "eigenaar/contactpersoon Patrick Hechtermans (General Manager)", "from": "bsearch.be (bedrijfsinfo Dakren)", "date": "2026-10-16" },
+    { "what": "reviews (3 letterlijke citaten, datums zoals getoond); bron is een externe bedrijvenkaart, niet de originele Google-pagina", "from": "https://exa.ai/library/place/vclm3jg6l1f", "date": "2026-10-16" },
+    { "what": "kleur primary/ink: magenta uit het logo op dakren.be (header-logo), HEX geschat visueel, nog niet met pipet gecontroleerd", "from": "https://www.dakren.be (logo in header, gallery_gen/5e0d2fc1aeaf9f323df4f3377f5258f0_*)", "date": "2026-10-16" },
+    { "what": "foto's client/work-01..06: eigen realisaties, afbeeldingen uit de galerij op dakren.be", "from": "https://www.dakren.be (Realisaties-galerij)", "date": "2026-10-16" }
+  ],
+
+  "facts": {
+    "name": "Dakren",
+    "legalName": "DAKREN bv",
+    "vat": "BE0792982918",
+    "owner": "Patrick Hechtermans",
+    "foundedYear": null,
+    "phone": "0475 56 71 50",
+    "phoneE164": "+32475567150",
+    "whatsappE164": null,
+    "email": "dakren@telenet.be",
+    "address": { "street": "Teunisstraat 3", "postalCode": "3800", "city": "Zepperen (Sint-Truiden)", "region": null, "country": "BE" },
+    "showAddress": false,
+    "openingHours": [],
+    "geo": null,
+    "reviews": { "score": null, "count": null, "googleUrl": null },
+    "social": { "facebook": null, "instagram": null, "tiktok": null },
+    "schemaType": "RoofingContractor",
+    "siteUrl": null
+  },
+
+  "design": { "style": "warm", "primary": "#8b1f6e", "ink": "#4a0f3a", "logo": null, "ogImage": null, "heroVariant": "split" },
+  "languages": ["nl"],
+  "sections": ["hero", "trust", "services", "gallery", "reviews", "process", "about", "faq", "contact"],
+  "topbar": true,
+
+  "home": {
+    "nl": {
+      "meta": {
+        "title": "Dakwerken Zepperen en Sint-Truiden | Dakren",
+        "description": "Platte en hellende daken, dakrenovatie en carports in Zepperen en Sint-Truiden. Familiebedrijf van Patrick Hechtermans. Eerst een bezoek, dan een vrijblijvende offerte.",
+        "updated": "2026-10-16"
+      },
+      "hero": {
+        "eyebrow": "Zepperen · Sint-Truiden",
+        "title": "Patrick Hechtermans legt platte en hellende daken in Zepperen en Sint-Truiden",
+        "titleAccent": "Eerst een bezoek, dan een plan met prijs",
+        "subtitle": "Klein familiebedrijf, al ongeveer dertig jaar daken maken voor klanten uit de regio.",
+        "bullets": ["Eerst een bezoek ter plaatse", "Plan met kostenplaatje"],
+        "image": "client/work-01.jpg",
+        "imageAlt": "Carport met pannendak, werk van Dakren"
+      },
+      "trust": {
+        "items": [
+          { "icon": "users", "label": "Familiebedrijf" },
+          { "icon": "map-pin", "label": "Zepperen (Sint-Truiden)" },
+          { "icon": "layers", "label": "Plat en hellend dak" },
+          { "icon": "file-text", "label": "Vrijblijvende offerte" }
+        ]
+      },
+      "services": { "eyebrow": "Diensten", "title": "Wat wij doen aan uw dak", "intro": "Plat dak, hellend dak, dakrenovatie en carports. Alles vanuit één bedrijf." },
+      "gallery": { "eyebrow": "Realisaties", "title": "Ons werk", "intro": "Carports, dakwerken en dakrenovaties in Sint-Truiden." },
+      "reviews": { "eyebrow": "Reacties", "title": "Wat klanten schrijven" },
+      "process": {
+        "eyebrow": "Werkwijze",
+        "title": "Van bezoek tot offerte",
+        "steps": [
+          { "title": "Bezoek", "text": "Een van onze medewerkers komt bij u kijken en bespreekt uw wensen." },
+          { "title": "Opmeten", "text": "We meten het dak en de werkzaamheden op." },
+          { "title": "Plan en kostenplaatje", "text": "U krijgt een plan met alle werkzaamheden tot in de kleinste details, plus een kostenplaatje." },
+          { "title": "Offerte", "text": "Het plan komt samen met de offerte. Alles is vrijblijvend." }
+        ]
+      },
+      "about": {
+        "eyebrow": "Over Dakren",
+        "title": "Een klein familiebedrijf uit Zepperen",
+        "paragraphs": [
+          "Dakren is het dakwerkbedrijf van Patrick Hechtermans uit Sint-Truiden. Het is een klein familiebedrijf.",
+          "Al een dertigtal jaar maakt hij daken voor zijn klanten. Het bedrijf is gevestigd aan de Teunisstraat in Zepperen.",
+          "Elke klus begint met een bezoek en opmeten. Pas daarna maken we het plan en de prijs."
+        ]
+      },
+      "faq": {
+        "eyebrow": "Vragen",
+        "title": "Veelgestelde vragen",
+        "items": [
+          { "q": "Doen jullie platte daken én hellende daken?", "a": "Ja. We werken aan platte en hellende daken: nieuwbouw, herstellingen en onderhoud." },
+          { "q": "Wat gebeurt er na mijn aanvraag?", "a": "Een van onze medewerkers komt bij u kijken, bespreekt uw wensen en neemt de maten op." },
+          { "q": "Wat krijg ik na het bezoek?", "a": "Een plan met alle werkzaamheden tot in de kleinste details, een kostenplaatje en de offerte. Alles is vrijblijvend." },
+          { "q": "Maken jullie ook carports?", "a": "Ja, carports staan in ons aanbod. Neem contact op, dan bespreken we uw situatie." }
+        ]
+      },
+      "contact": {
+        "eyebrow": "Contact",
+        "title": "Vraag een bezoek aan",
+        "text": "Vul het formulier in of bel ons. Een van onze medewerkers komt bij u kijken."
+      },
+      "footer": { "tagline": "Dakwerken, dakrenovatie en carports in Zepperen (Sint-Truiden)." }
+    }
+  },
+
+  "services": [
+    {
+      "id": "platte-daken",
+      "icon": "layers",
+      "nl": {
+        "title": "Platte daken",
+        "summary": "Nieuwbouw, herstelling en onderhoud van platte daken, met nieuwe dakbedekking waar nodig.",
+        "body": [
+          "Voor platte daken doen we nieuwbouw, herstellingen en onderhoud. We leggen de dakbedekking en herstellen lekkages.",
+          "Eerst komt een van onze medewerkers langs. Hij bekijkt het dak, bespreekt met u wat er moet gebeuren en meet alles op.",
+          "Daarna krijgt u een plan met alle werkzaamheden tot in de kleinste details, een kostenplaatje en de offerte. Alles is vrijblijvend."
+        ]
+      }
+    },
+    {
+      "id": "hellende-daken",
+      "icon": "house",
+      "nl": {
+        "title": "Hellende daken",
+        "summary": "Pannen vervangen, lekkages herstellen en hellende daken onderhouden.",
+        "body": [
+          "Bij hellende daken vervangen we dakpannen, herstellen we lekkages en onderhouden we het dak.",
+          "Ook hier begint het met een bezoek: we kijken naar het dak, bespreken uw wensen en meten op.",
+          "U krijgt het plan met de werkzaamheden en een kostenplaatje, samen met de offerte. Alles is vrijblijvend."
+        ]
+      }
+    },
+    {
+      "id": "dakrenovatie",
+      "icon": "hammer",
+      "nl": {
+        "title": "Dakrenovatie",
+        "summary": "Dakbedekking vervangen, lekkages verhelpen, dakconstructie of isolatie aanpakken.",
+        "body": [
+          "Bij een dakrenovatie kijken we eerst naar de staat van het dak. Daarna maken we een plan dat past bij wat u wilt.",
+          "Dat kan betekenen: de dakbedekking vervangen, een lekkage verhelpen, de dakconstructie opknappen of de isolatie verbeteren.",
+          "U krijgt de werkzaamheden tot in de kleinste details en een kostenplaatje in dezelfde offerte."
+        ]
+      }
+    },
+    {
+      "id": "carports",
+      "icon": "car",
+      "nl": {
+        "title": "Carports",
+        "summary": "Overkapping voor uw wagen, gemaakt door hetzelfde team als onze dakwerken.",
+        "body": []
+      }
+    }
+  ],
+
+  "gallery": [
+    { "id": "carport-pannendak", "service": "carports", "image": "client/work-01.jpg", "nl": { "title": "Carport met pannendak", "imageAlt": "Carport met pannendak, werk van Dakren" } },
+    { "id": "dakwerk-sint-truiden-1", "service": null, "image": "client/work-02.jpg", "nl": { "title": "Dakwerken Sint-Truiden", "imageAlt": "Dakwerken in Sint-Truiden, werk van Dakren" } },
+    { "id": "dakrenovatie-sint-truiden-1", "service": "dakrenovatie", "image": "client/work-03.jpg", "nl": { "title": "Dakrenovatie Sint-Truiden", "imageAlt": "Dakrenovatie in Sint-Truiden, werk van Dakren" } },
+    { "id": "dakrenovatie-sint-truiden-2", "service": "dakrenovatie", "image": "client/work-04.jpg", "nl": { "title": "Dakrenovatie Sint-Truiden", "imageAlt": "Dakrenovatie in Sint-Truiden, werk van Dakren" } },
+    { "id": "dakwerk-sint-truiden-2", "service": null, "image": "client/work-05.jpg", "nl": { "title": "Dakwerken Sint-Truiden", "imageAlt": "Dakwerken in Sint-Truiden, werk van Dakren" } },
+    { "id": "dakrenovatie-sint-truiden-3", "service": "dakrenovatie", "image": "client/work-06.jpg", "nl": { "title": "Dakrenovatie Sint-Truiden", "imageAlt": "Dakrenovatie in Sint-Truiden, werk van Dakren" } }
+  ],
+
+  "reviews": [
+    { "author": "Conny en Alain", "text": "Top firma!heel vriendelijke,respectvolle harde werkers.alles tip top in orde ,goede kwaliteit .en ook nog alles heel mooi opgeruimd. Een dikke merci aan jullie van ons(conny en alain uit leopoldsburg)", "rating": 5, "source": "exa.ai (bedrijvenkaart Dakren)", "date": "2025-10-30" },
+    { "author": "Klant", "text": "Vakmensen en van hun woord,vermelden waard.", "rating": 5, "source": "exa.ai (bedrijvenkaart Dakren)", "date": "2022-03-23" },
+    { "author": "Klant", "text": "Sterk aanbevolen: kwalitatieve materialen, professioneel advies, goede afspraken, degelijke uitvoering, ... Heel fijne ervaring en met een gerust gemoed over het nieuwe dak voor de volgende generaties.", "rating": 5, "source": "exa.ai (bedrijvenkaart Dakren)", "date": "2021-03-18" }
+  ],
+
+  "privacy": { "updated": null, "processors": ["vercel", "resend", "telegram"] }
+}
