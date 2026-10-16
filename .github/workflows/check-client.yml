@@ -26,6 +26,10 @@ jobs:
         run: |
           set -o pipefail
           if [ ! -f client.json ]; then echo "::error title=client.json::В корне ветки нет client.json"; exit 1; fi
+          # vercel.json Vercel читает до сборки; битый JSON = «Invalid vercel.json», а astro build его не замечает
+          if ! err=$(node -e 'JSON.parse(require("fs").readFileSync("vercel.json","utf8"))' 2>&1); then
+            echo "::error title=vercel.json::$(echo "$err" | grep -m1 -E 'SyntaxError|Error')"; exit 1
+          fi
           if npm run build 2>&1 | tee build.log; then
             echo "::notice title=OK::client.json и сборка без ошибок"
             # отчёт «перед запуском не хватает / можно улучшить» — подсказкой, не ошибкой
