@@ -29,13 +29,13 @@ export async function visibleSections(lang: Lang): Promise<SectionId[]> {
 // hero sits on the surface colour, the cover hero and contact are dark; every
 // other section alternates base / alt after the hero.
 export type Tone = 'base' | 'alt';
-export function tonesFor(ids: SectionId[]): Record<SectionId, Tone> {
-  const tones = { hero: 'alt', contact: 'base' } as Record<SectionId, Tone>;
+export function tonesFor<T extends string>(ids: T[]): Record<T, Tone> {
+  const tones = { hero: 'alt', contact: 'base' } as Record<string, Tone>;
   let next: Tone = 'base';
   for (const id of ids) {
     if (id === 'hero' || id === 'contact') continue;
     tones[id] = next;
     next = next === 'base' ? 'alt' : 'base';
   }
-  return tones;
+  return tones as Record<T, Tone>;
 }

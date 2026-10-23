@@ -96,6 +96,25 @@ const homeText = z
       .strict()
       .optional(),
     gallery: z.object({ ...heading, intro: optText }).strict().optional(),
+    video: z
+      .object({
+        ...heading,
+        caption: optText.describe('Short caption under the video; no new facts'),
+        alt: text.describe('aria-label of the video: what it shows'),
+        src: z
+          .string()
+          .regex(/^\/videos\/[\w.-]+\.mp4$/, 'expected a path like "/videos/demo.mp4" (file in public/videos/, ≤ 4 MB)')
+          .describe('Video file in public/videos/ (muted, no speech; loads lazily)'),
+        poster: z
+          .string()
+          .regex(/^\/videos\/[\w.-]+\.jpg$/, 'expected a path like "/videos/demo.jpg" (file in public/videos/, ≤ 100 KB)')
+          .describe('Poster frame in public/videos/'),
+        width: z.number().int().positive().describe('Video width in px (sets the aspect ratio, no layout shift)'),
+        height: z.number().int().positive().describe('Video height in px'),
+      })
+      .strict()
+      .optional()
+      .describe('Demo video block after the services section; leave out = no block'),
     reviews: z.object(heading).strict().optional(),
     faq: z
       .object({ ...heading, items: z.array(z.object({ q: text, a: text }).strict()).default([]) })

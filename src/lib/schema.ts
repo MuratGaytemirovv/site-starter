@@ -138,6 +138,20 @@ export const contentSchema = z.object({
     items: z.array(z.object({ icon: z.string(), title: z.string(), text: z.string() })),
   }),
   gallery: z.object({ eyebrow: z.string(), title: z.string(), intro: z.string() }),
+  // Optional demo video block (shown after services); null/absent = no block.
+  video: z
+    .object({
+      eyebrow: z.string(),
+      title: z.string(),
+      caption: z.string(),
+      alt: z.string(),
+      src: z.string(),
+      poster: z.string(),
+      width: z.number().int().positive(),
+      height: z.number().int().positive(),
+    })
+    .nullable()
+    .optional(),
   reviews: z.object({ eyebrow: z.string(), title: z.string() }),
   faq: z.object({
     eyebrow: z.string(),
