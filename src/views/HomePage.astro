@@ -12,12 +12,13 @@ import WhyUs from '../components/sections/WhyUs.astro';
 import Reviews from '../components/sections/Reviews.astro';
 import Faq from '../components/sections/Faq.astro';
 import Contact from '../components/sections/Contact.astro';
+import DemoVideo from '../components/sections/DemoVideo.astro';
 import { facts, getContent, sectionVariant } from '../lib/site';
 import { getGallery, getReviews, getServices } from '../lib/collections';
 import { tonesFor, visibleSections } from '../lib/sections';
 import { faqPage } from '../lib/jsonld';
 import { themeFor } from '../lib/theme';
-import { HERO_VARIANTS, type Lang } from '../lib/schema';
+import { HERO_VARIANTS, type Lang, type SectionId } from '../lib/schema';
 import type { PageRoute } from '../lib/routes';
 import { ui } from '../i18n/ui';
 
@@ -30,7 +31,14 @@ const lang = route.lang;
 const t = ui(lang);
 const content = getContent(lang);
 const sections = await visibleSections(lang);
-const tones = tonesFor(sections);
+// Optional demo video block: sits after services (after the hero when services are hidden).
+// It is not a menu section, so it joins the list only for the background rhythm.
+const video = content.video ?? null;
+const videoAfter = sections.includes('services') ? 'services' : 'hero';
+const blocks: (SectionId | 'demo-video')[] = video
+  ? sections.flatMap((id): (SectionId | 'demo-video')[] => (id === videoAfter ? [id, 'demo-video'] : [id]))
+  : sections;
+const tones = tonesFor(blocks);
 const [services, gallery, reviews] = await Promise.all([getServices(lang), getGallery(lang), getReviews()]);
 
 const heroVariantRaw = sectionVariant('hero') ?? themeFor(facts).heroVariant;
@@ -43,8 +51,10 @@ const jsonLd = sections.includes('faq') ? [faqPage(content.faq.items)] : [];
 
 <BaseLayout lang={lang} title={content.meta.title} description={content.meta.description} path={route.path} alternates={alternates} jsonLd={jsonLd}>
   {
-    sections.map((id) => {
+    blocks.map((id) => {
       switch (id) {
+        case 'demo-video':
+          return video && <DemoVideo content={video} tone={tones['demo-video']} />;
         case 'hero':
           return <Hero t={t} content={content.hero} variant={heroVariant} sections={sections} />;
         case 'trust':

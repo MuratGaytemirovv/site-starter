@@ -65,6 +65,16 @@
       },
       "services": { "eyebrow": "Diensten", "title": "Wat wij doen aan uw dak", "intro": "Plat dak, hellend dak, dakrenovatie en carports. Alles vanuit één bedrijf." },
       "gallery": { "eyebrow": "Realisaties", "title": "Ons werk", "intro": "Carports, dakwerken en dakrenovaties in Sint-Truiden." },
+      "video": {
+        "eyebrow": "Demo",
+        "title": "Zo kan uw website eruitzien",
+        "caption": "Een korte rondleiding door de demowebsite van Dakren, op computer en op de gsm.",
+        "alt": "Demovideo: rondleiding door de nieuwe website van Dakren op computer en op de gsm",
+        "src": "/videos/dakren.mp4",
+        "poster": "/videos/dakren.jpg",
+        "width": 1280,
+        "height": 720
+      },
       "reviews": { "eyebrow": "Reacties", "title": "Wat klanten schrijven" },
       "process": {
         "eyebrow": "Werkwijze",

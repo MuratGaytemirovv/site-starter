@@ -186,6 +186,18 @@ function buildContent(c: Client, lang: Lang) {
     process: { ...head('process', d.titles.process, h.process), steps: h.process?.steps ?? [] },
     whyUs: { ...head('why-us', d.titles.whyUs, h.whyUs), items: h.whyUs?.items ?? [] },
     gallery: { ...head('gallery', d.titles.gallery, h.gallery), intro: s(h.gallery?.intro) },
+    video: h.video
+      ? {
+          eyebrow: s(h.video.eyebrow),
+          title: s(h.video.title),
+          caption: s(h.video.caption),
+          alt: h.video.alt,
+          src: h.video.src,
+          poster: h.video.poster,
+          width: h.video.width,
+          height: h.video.height,
+        }
+      : null,
     reviews: head('reviews', d.titles.reviews, h.reviews),
     faq: { ...head('faq', d.titles.faq, h.faq), items: h.faq?.items ?? [] },
     contact: {

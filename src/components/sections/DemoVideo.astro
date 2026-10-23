@@ -1,0 +1,64 @@
+---
+// Demo video block (optional, from home.<lang>.video in client.json). The video
+// and poster load only when the block comes near the screen; muted autoplay
+// while it is more than 35% visible, pause when it leaves. With reduced motion:
+// no autoplay, poster + controls. width/height reserve the space (no layout shift).
+import Section from '../Section.astro';
+import SectionHeading from '../SectionHeading.astro';
+import type { Content } from '../../lib/schema';
+import type { Tone } from '../../lib/sections';
+
+type Video = NonNullable<Content['video']>;
+interface Props {
+  content: Video;
+  tone: Tone;
+}
+const { content, tone } = Astro.props;
+---
+
+<Section id="demo-video" tone={tone}>
+  <SectionHeading eyebrow={content.eyebrow} title={content.title} intro={content.caption} align="split" />
+  <div class="mx-auto w-full max-w-[960px]" data-reveal>
+    <video
+      data-demo-video
+      data-src={content.src}
+      data-poster={content.poster}
+      class="block h-auto w-full rounded-card border border-line bg-ink-soft shadow-[0_18px_36px_-18px_rgb(0_0_0/0.25)]"
+      style={`aspect-ratio: ${content.width} / ${content.height};`}
+      width={content.width}
+      height={content.height}
+      muted
+      loop
+      playsinline
+      preload="none"
+      aria-label={content.alt}></video>
+  </div>
+</Section>
+
+<script>
+  const video = document.querySelector<HTMLVideoElement>('video[data-demo-video]');
+  if (video) {
+    const still = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if (still) video.controls = true;
+    let loaded = false;
+    let visible = false;
+    const load = () => {
+      if (loaded) return;
+      loaded = true;
+      video.poster = video.dataset.poster ?? '';
+      video.src = video.dataset.src ?? '';
+      if (visible && !still) video.play().catch(() => {});
+    };
+    const io = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) load();
+        visible = entry.intersectionRatio > 0.35;
+        if (still) return;
+        if (visible && loaded) video.play().catch(() => {});
+        else video.pause();
+      },
+      { rootMargin: '300px 0px', threshold: [0, 0.35] },
+    );
+    io.observe(video);
+  }
+</script>
