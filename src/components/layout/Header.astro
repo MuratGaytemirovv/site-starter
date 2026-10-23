@@ -5,7 +5,7 @@
 import Icon from '../Icon.astro';
 import Logo from '../Logo.astro';
 import Button from '../Button.astro';
-import { facts, links } from '../../lib/site';
+import { facts, getContent, links } from '../../lib/site';
 import { homePath, sectionHref } from '../../lib/routes';
 import type { Lang, SectionId } from '../../lib/schema';
 import { ui, type UI } from '../../i18n/ui';
@@ -21,6 +21,10 @@ const { t, lang, sections, alternates } = Astro.props;
 const desktop = t.headerNav.filter((id) => sections.includes(id));
 const mobile = sections.filter((id) => id !== 'hero' && id !== 'trust' && t.sections[id].nav);
 const hasContact = sections.includes('contact');
+// The optional demo video block is not a section: it gets its own mobile menu link,
+// placed where the block sits on the home page (after services, else first menu item).
+const hasVideo = Boolean(getContent(lang).video);
+const videoAfter = sections.includes('services') ? 'services' : mobile[0];
 
 // Language switcher: only with 2+ languages; links to this page in the other
 // language, or to that language's home page when there is no translation.
@@ -105,9 +109,16 @@ const languages =
       <nav class="flex flex-col gap-1" aria-label={t.nav.mobile}>
         {
           mobile.map((id) => (
-            <a href={sectionHref(lang, id)} class="rounded-card px-2 py-3 font-heading text-[20px] font-semibold text-heading hover:bg-surface">
-              {t.sections[id].nav}
-            </a>
+            <>
+              <a href={sectionHref(lang, id)} class="rounded-card px-2 py-3 font-heading text-[20px] font-semibold text-heading hover:bg-surface">
+                {t.sections[id].nav}
+              </a>
+              {id === videoAfter && hasVideo && (
+                <a href={`${homePath(lang)}#demo-video`} class="rounded-card px-2 py-3 font-heading text-[20px] font-semibold text-heading hover:bg-surface">
+                  {t.nav.video}
+                </a>
+              )}
+            </>
           ))
         }
       </nav>
