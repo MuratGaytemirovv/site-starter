@@ -45,6 +45,7 @@ const nl = {
     whatsapp: 'WhatsApp',
     more: 'Meer weten',
     back: 'Terug naar de startpagina',
+    site: 'Bekijk de website zelf',
   },
   contact: {
     hours: 'Openingsuren',
@@ -148,6 +149,7 @@ const fr: UI = {
     whatsapp: 'WhatsApp',
     more: 'En savoir plus',
     back: 'Retour à l’accueil',
+    site: 'Voir le site lui-même',
   },
   contact: {
     hours: 'Heures d’ouverture',
@@ -247,6 +249,7 @@ const en: UI = {
     whatsapp: 'WhatsApp',
     more: 'Learn more',
     back: 'Back to the home page',
+    site: 'See the website itself',
   },
   contact: {
     hours: 'Opening hours',
@@ -346,6 +349,7 @@ const ru: UI = {
     whatsapp: 'WhatsApp',
     more: 'Подробнее',
     back: 'На главную',
+    site: 'Открыть сам сайт',
   },
   contact: {
     hours: 'Часы работы',

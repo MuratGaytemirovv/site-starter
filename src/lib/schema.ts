@@ -138,7 +138,7 @@ export const contentSchema = z.object({
     items: z.array(z.object({ icon: z.string(), title: z.string(), text: z.string() })),
   }),
   gallery: z.object({ eyebrow: z.string(), title: z.string(), intro: z.string() }),
-  // Optional demo video block (shown after services); null/absent = no block.
+  // Optional demo video: its own page /video (not on the homepage, not in the menu or sitemap); null/absent = no page.
   video: z
     .object({
       eyebrow: z.string(),

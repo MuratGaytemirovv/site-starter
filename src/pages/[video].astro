@@ -1,0 +1,22 @@
+---
+// /video — the demo video on its own page (only when client.json has home.<lang>.video).
+// For the follow-up mail: "the site on computer and phone in 25 seconds". Not on the
+// homepage, not in the menu or the sitemap, always noindex. Default language only.
+import BaseLayout from '../layouts/BaseLayout.astro';
+import DemoVideo from '../components/sections/DemoVideo.astro';
+import { defaultLang, facts, getContent } from '../lib/site';
+import { homePath } from '../lib/routes';
+import { ui } from '../i18n/ui';
+
+export function getStaticPaths() {
+  return getContent(defaultLang).video ? [{ params: { video: 'video' } }] : [];
+}
+
+const lang = defaultLang;
+const t = ui(lang);
+const video = getContent(lang).video!;
+---
+
+<BaseLayout lang={lang} title={`${video.title} — ${facts.name}`} description={video.caption || video.alt} path="/video" noindex>
+  <DemoVideo content={video} cta={t.cta.site} href={homePath(lang)} />
+</BaseLayout>

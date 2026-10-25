@@ -996,6 +996,83 @@
             },
             "additionalProperties": false
           },
+          "video": {
+            "description": "Demo video on its own page /video (link for a follow-up mail; not on the homepage); leave out = no page",
+            "type": "object",
+            "properties": {
+              "eyebrow": {
+                "description": "Small label above the title; default = the section name",
+                "anyOf": [
+                  {
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              },
+              "title": {
+                "description": "Section title; default = a neutral title in this language",
+                "anyOf": [
+                  {
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              },
+              "caption": {
+                "description": "Short caption under the video; no new facts",
+                "anyOf": [
+                  {
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              },
+              "alt": {
+                "type": "string",
+                "minLength": 1,
+                "description": "aria-label of the video: what it shows"
+              },
+              "src": {
+                "type": "string",
+                "pattern": "^\\/videos\\/[\\w.-]+\\.mp4$",
+                "description": "Video file in public/videos/ (muted, no speech)"
+              },
+              "poster": {
+                "type": "string",
+                "pattern": "^\\/videos\\/[\\w.-]+\\.jpg$",
+                "description": "Poster frame in public/videos/"
+              },
+              "width": {
+                "type": "integer",
+                "exclusiveMinimum": 0,
+                "maximum": 9007199254740991,
+                "description": "Video width in px (sets the aspect ratio, no layout shift)"
+              },
+              "height": {
+                "type": "integer",
+                "exclusiveMinimum": 0,
+                "maximum": 9007199254740991,
+                "description": "Video height in px"
+              }
+            },
+            "required": [
+              "alt",
+              "src",
+              "poster",
+              "width",
+              "height"
+            ],
+            "additionalProperties": false
+          },
           "reviews": {
             "type": "object",
             "properties": {

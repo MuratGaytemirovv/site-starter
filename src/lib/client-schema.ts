@@ -104,7 +104,7 @@ const homeText = z
         src: z
           .string()
           .regex(/^\/videos\/[\w.-]+\.mp4$/, 'expected a path like "/videos/demo.mp4" (file in public/videos/, ≤ 4 MB)')
-          .describe('Video file in public/videos/ (muted, no speech; loads lazily)'),
+          .describe('Video file in public/videos/ (muted, no speech)'),
         poster: z
           .string()
           .regex(/^\/videos\/[\w.-]+\.jpg$/, 'expected a path like "/videos/demo.jpg" (file in public/videos/, ≤ 100 KB)')
@@ -114,7 +114,7 @@ const homeText = z
       })
       .strict()
       .optional()
-      .describe('Demo video block after the services section; leave out = no block'),
+      .describe('Demo video on its own page /video (link for a follow-up mail; not on the homepage); leave out = no page'),
     reviews: z.object(heading).strict().optional(),
     faq: z
       .object({ ...heading, items: z.array(z.object({ q: text, a: text }).strict()).default([]) })
