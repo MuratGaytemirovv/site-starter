@@ -1,0 +1,120 @@
+{
+  "$schema": "../client.schema.json",
+  "demo": true,
+  "launched": false,
+  "sources": [
+    { "what": "legal name A.T.C.S. SRL, BTW BE 0805.715.850, address Chaussée de Gand 114, 7700 Mouscron, activity: installation of heating systems", "from": "companyweb.be/fr/0805715850 · trends top (levif.be)", "date": "2026-10-23" },
+    { "what": "name Atcs Chauffage, phone 0471 79 66 57, e-mail Atcs.chauffage@outlook.com, brands Vaillant, Viesmann, Buderus, Henrad, Radson, Grohe, Facebook link", "from": "facebook.com/atcschauffage (business page)", "date": "2026-10-23" },
+    { "what": "services: chaudière, chauffage central, radiateurs, chauffage au sol, chauffe-eau, dépannage, rénovation salle de bain, entretien sanitaire; devis gratuit; déplacement max. 20 km; zone Mouscron, Herseaux, Luingne, Estaimpuis, Tournai; 15 ans d'expérience (self-description)", "from": "trustup.fr/fr/entreprise/atcs-chauffage-srl", "date": "2026-10-23" },
+    { "what": "opening hours Mon–Fri 08:00–17:00, Sat–Sun closed — TO CONFIRM BY OWNER (aggregator data, not from the company)", "from": "sefaireaider.com (Google data, 2026)", "date": "2026-10-23" },
+    { "what": "process steps (call, visit, quote, works) — generic wording, not a claim from the company — TO CONFIRM BY OWNER", "from": "ISV Labs template text, owner to confirm", "date": null }
+  ],
+
+  "facts": {
+    "name": "Atcs Chauffage",
+    "legalName": "A.T.C.S. SRL",
+    "vat": "BE 0805.715.850",
+    "owner": null,
+    "foundedYear": null,
+    "phone": "0471 79 66 57",
+    "phoneE164": "+32471796657",
+    "whatsappE164": null,
+    "email": "Atcs.chauffage@outlook.com",
+    "address": { "street": "Chaussée de Gand 114", "postalCode": "7700", "city": "Mouscron", "region": "Hainaut", "country": "BE" },
+    "showAddress": false,
+    "openingHours": [
+      { "days": ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"], "opens": "08:00", "closes": "17:00" }
+    ],
+    "schemaType": "HVACBusiness",
+    "social": { "facebook": "https://www.facebook.com/atcschauffage" }
+  },
+
+  "design": { "style": "warm", "primary": "#b45309", "heroVariant": "split" },
+  "languages": ["fr"],
+  "sections": ["hero", "trust", "services", "about", "process", "faq", "contact"],
+
+  "home": {
+    "fr": {
+      "meta": {
+        "title": "Chauffagiste à Mouscron — Atcs Chauffage",
+        "description": "Installation, entretien et dépannage de chauffage et de sanitaire à Mouscron et environs. Plus de 15 ans d'expérience. Devis gratuit."
+      },
+      "hero": {
+        "eyebrow": "Mouscron · Hainaut",
+        "title": "Chauffagiste à Mouscron",
+        "titleAccent": "chaudière, chauffage, sanitaire",
+        "subtitle": "Installation, entretien et dépannage par un plombier-chauffagiste qui intervient à Mouscron et dans les environs.",
+        "primaryCta": "Demander un devis",
+        "secondaryCta": "Nous appeler",
+        "secondaryTarget": "contact",
+        "bullets": ["Devis gratuit", "Déplacement jusqu'à 20 km", "Vaillant, Viesmann, Buderus"],
+        "image": null,
+        "imageAlt": null
+      },
+      "trust": {
+        "items": [
+          { "icon": "file-text", "label": "Devis gratuit" },
+          { "icon": "map-pin", "label": "Jusqu'à 20 km autour de Mouscron" },
+          { "icon": "badge-check", "label": "Vaillant, Viesmann, Buderus" }
+        ]
+      },
+      "services": { "eyebrow": "Services", "title": "Ce que nous faisons pour votre chauffage", "intro": "De l'entretien de la chaudière à la rénovation complète de la salle de bain." },
+      "about": {
+        "eyebrow": "Qui nous sommes",
+        "title": "Un plombier-chauffagiste de la région",
+        "paragraphs": [
+          "Atcs Chauffage (A.T.C.S. SRL) installe, entretient et dépanne les systèmes de chauffage et de sanitaire à Mouscron, Herseaux, Luingne, Estaimpuis et Tournai.",
+          "Nous installons notamment des chaudières et équipements des marques Vaillant, Viesmann, Buderus, Henrad, Radson et Grohe."
+        ],
+        "stats": [{ "value": "15 ans", "label": "d'expérience" }]
+      },
+      "process": {
+        "eyebrow": "Déroulement",
+        "title": "Comment ça se passe",
+        "steps": [
+          { "title": "Vous nous appelez", "text": "Décrivez le problème ou le projet par téléphone ou par le formulaire." },
+          { "title": "Visite et devis", "text": "Nous venons sur place et vous recevez un devis gratuit." },
+          { "title": "Travaux", "text": "Nous réalisons les travaux convenus." }
+        ]
+      },
+      "faq": {
+        "eyebrow": "Questions",
+        "title": "Questions fréquentes",
+        "items": [
+          { "q": "Dans quelle zone intervenez-vous ?", "a": "À Mouscron et dans les environs, jusqu'à 20 km : Herseaux, Luingne, Estaimpuis, Tournai." },
+          { "q": "Le devis est-il gratuit ?", "a": "Oui, le devis est gratuit." }
+        ]
+      },
+      "contact": {
+        "eyebrow": "Contact",
+        "title": "Demandez votre devis",
+        "text": "Décrivez votre installation ou le problème. Nous vous rappelons pour convenir d'une visite.",
+        "responseTime": null
+      },
+      "footer": { "tagline": "Chauffagiste et plombier à Mouscron." }
+    }
+  },
+
+  "services": [
+    {
+      "id": "chaudiere",
+      "icon": "flame",
+      "fr": { "slug": "chaudiere", "title": "Chaudière", "summary": "Installation, entretien et remplacement de votre chaudière." }
+    },
+    {
+      "id": "chauffage-central",
+      "icon": "thermometer",
+      "fr": { "slug": "chauffage-central", "title": "Chauffage central", "summary": "Radiateurs, chauffage au sol et thermostats : installation et réparation." }
+    },
+    {
+      "id": "depannage",
+      "icon": "wrench",
+      "fr": { "slug": "depannage", "title": "Dépannage", "summary": "Intervention rapide en cas de panne de chauffage ou de fuite d'eau." }
+    },
+    {
+      "id": "salle-de-bain",
+      "icon": "bath",
+      "fr": { "slug": "salle-de-bain", "title": "Salle de bain", "summary": "Rénovation de salle de bain et entretien sanitaire." }
+    }
+  ]
+}
