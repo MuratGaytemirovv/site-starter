@@ -109,7 +109,7 @@
     {
       "id": "depannage",
       "icon": "wrench",
-      "fr": { "slug": "depannage", "title": "Dépannage", "summary": "Intervention rapide en cas de panne de chauffage ou de fuite d'eau." }
+      "fr": { "slug": "depannage", "title": "Dépannage", "summary": "Intervention en cas de panne de chauffage ou de fuite d'eau." }
     },
     {
       "id": "salle-de-bain",
