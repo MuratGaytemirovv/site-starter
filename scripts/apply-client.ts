@@ -132,7 +132,9 @@ function buildFacts(c: Client) {
     style: c.design.style,
     brand: { primary: c.design.primary ?? null, ink: c.design.ink ?? null },
     languages: c.languages,
-    siteUrl: f.siteUrl ?? 'https://example.com',
+    // Своего домена нет (демо): постоянный адрес ветки на Vercel вместо заглушки — иначе canonical, og:url и разметка
+    // ведут на example.com (превью ссылки в WhatsApp/Facebook, 2026-11-07). Локально переменных Vercel нет — заглушка.
+    siteUrl: f.siteUrl ?? (process.env.VERCEL_BRANCH_URL ? `https://${process.env.VERCEL_BRANCH_URL}` : 'https://example.com'),
     launched: c.launched,
     demo: c.demo,
     privacy: { updated: c.privacy.updated ?? null, processors: c.privacy.processors },
