@@ -1,0 +1,155 @@
+{
+  "$schema": "../client.schema.json",
+  "demo": true,
+  "launched": false,
+  "sources": [
+    { "what": "legal name Nick Debeuf BV, BTW BE 0770.980.348, address Zuster Blancastraat 1, 8820 Torhout, founded 2021, activity electrical installation", "from": "companyweb.be/fr/0770980348 · belscope.be/company/0770980348 · eulerpool (KBO)", "date": "2026-11-10" },
+    { "what": "name, phone 0477 61 89 83, services (electrical installation, PV installation, domotica, keuring)", "from": "exa.ai place listing Nick Debeuf Elektriciteitswerken · bottin.be · elektricien-gids.be", "date": "2026-11-10" },
+    { "what": "opening hours Mon–Fri 08:30–17:30, Sat–Sun closed (owner chose this variant)", "from": "elektricien-gids.be · owner confirmation 2026-11-10", "date": "2026-11-10" },
+    { "what": "e-mail info@nickdebeufbv.be (owner: use for site)", "from": "exa.ai place listing; not yet confirmed by the business itself", "date": "2026-11-10" },
+    { "what": "reviews 5.0 from 19 reviews; 3 review texts word for word, authors shown as 'Klant, Torhout' by owner decision", "from": "exa.ai place listing (review source: online catalogue, not Google)", "date": "2026-11-10" }
+  ],
+
+  "facts": {
+    "name": "Nick Debeuf Elektriciteitswerken",
+    "legalName": "Nick Debeuf BV",
+    "vat": "BE 0770.980.348",
+    "owner": "Nick Debeuf",
+    "foundedYear": 2021,
+    "phone": "0477 61 89 83",
+    "phoneE164": "+32477618983",
+    "whatsappE164": null,
+    "email": "info@nickdebeufbv.be",
+    "address": { "street": "Zuster Blancastraat 1", "postalCode": "8820", "city": "Torhout", "region": "West-Vlaanderen", "country": "BE" },
+    "showAddress": false,
+    "openingHours": [
+      { "days": ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"], "opens": "08:30", "closes": "17:30" }
+    ],
+    "geo": null,
+    "reviews": { "score": 5, "count": 19, "googleUrl": null },
+    "social": { "facebook": "https://facebook.com/101224418524629" },
+    "schemaType": "Electrician",
+    "siteUrl": null
+  },
+
+  "design": { "style": "warm", "primary": "#b45309", "heroVariant": "split" },
+  "languages": ["nl"],
+  "sections": ["hero", "trust", "services", "about", "process", "reviews", "faq", "contact"],
+
+  "home": {
+    "nl": {
+      "meta": {
+        "title": "Elektricien in Torhout — Nick Debeuf Elektriciteitswerken",
+        "description": "Elektrische installaties, zonnepanelen, domotica en keuringen in Torhout en omgeving. Duidelijke offerte, afspraken worden nagekomen."
+      },
+      "hero": {
+        "eyebrow": "Torhout · West-Vlaanderen",
+        "title": "Elektricien in Torhout",
+        "titleAccent": "duidelijk, stipt en correct",
+        "subtitle": "Van een kleine herstelling tot een volledige elektrische installatie, zonnepanelen of domotica. Nick komt zijn afspraken na.",
+        "primaryCta": "Offerte aanvragen",
+        "secondaryCta": "Wat we doen",
+        "secondaryTarget": "services",
+        "bullets": ["Gedetailleerde offerte", "Gemakkelijk bereikbaar", "Netjes en correct afgewerkt"],
+        "image": null,
+        "imageAlt": null
+      },
+      "trust": {
+        "items": [
+          { "icon": "file-text", "label": "Gedetailleerde offerte" },
+          { "icon": "map-pin", "label": "Torhout en omgeving" },
+          { "icon": "star", "label": "5 op 5 uit 19 beoordelingen" }
+        ]
+      },
+      "services": {
+        "eyebrow": "Diensten",
+        "title": "Wat Nick voor u doet",
+        "intro": "Voor particulieren en kleine bedrijven."
+      },
+      "about": {
+        "eyebrow": "Over Nick",
+        "title": "Eén elektricien, één aanspreekpunt",
+        "paragraphs": [
+          "Nick Debeuf Elektriciteitswerken is een kleine elektriciteitsfirma uit Torhout, opgericht in 2021.",
+          "U krijgt steeds dezelfde persoon: van de eerste oproep tot de afwerking."
+        ],
+        "stats": [{ "value": "5 op 5", "label": "uit 19 beoordelingen" }]
+      },
+      "process": {
+        "eyebrow": "Werkwijze",
+        "title": "Hoe het verloopt",
+        "steps": [
+          { "title": "U belt of vult het formulier in", "text": "Beschrijf kort wat u nodig heeft." },
+          { "title": "Afspraak en offerte", "text": "Nick komt langs en maakt een gedetailleerde offerte." },
+          { "title": "Uitvoering", "text": "Het werk wordt uitgevoerd zoals afgesproken, en netjes afgewerkt." }
+        ]
+      },
+      "reviews": {
+        "eyebrow": "Beoordelingen",
+        "title": "Wat klanten zeggen"
+      },
+      "faq": {
+        "eyebrow": "Vragen",
+        "title": "Veelgestelde vragen",
+        "items": [
+          { "q": "In welke regio werkt u?", "a": "In Torhout en de omliggende gemeenten in West-Vlaanderen." },
+          { "q": "Is een offerte gratis?", "a": "Een gedetailleerde offerte wordt vooraf met u besproken." }
+        ]
+      },
+      "contact": {
+        "eyebrow": "Contact",
+        "title": "Vraag uw offerte aan",
+        "text": "Beschrijf kort uw project of het probleem. Nick neemt contact met u op.",
+        "responseTime": null
+      },
+      "footer": { "tagline": "Elektriciteitswerken in Torhout en omgeving." }
+    }
+  },
+
+  "services": [
+    {
+      "id": "elektrische-installatie",
+      "icon": "zap",
+      "nl": { "slug": "elektrische-installatie", "title": "Elektrische installatie", "summary": "Plaatsen, herstellen en vernieuwen van elektrische installaties." }
+    },
+    {
+      "id": "zonnepanelen",
+      "icon": "sun",
+      "nl": { "slug": "zonnepanelen", "title": "Zonnepanelen", "summary": "Installatie van zonnepanelen met een duidelijke offerte vooraf." }
+    },
+    {
+      "id": "domotica",
+      "icon": "home",
+      "nl": { "slug": "domotica", "title": "Domotica", "summary": "Slimme verlichting, deurbellen en automatisatie voor uw woning." }
+    },
+    {
+      "id": "keuring",
+      "icon": "clipboard-check",
+      "nl": { "slug": "keuring", "title": "Keuring en kleine werken", "summary": "Elektrische keuring en kleine elektriciteitswerken." }
+    }
+  ],
+
+  "reviews": [
+    {
+      "author": "Klant, Torhout",
+      "text": "Werkt proper, helpt meedenken, gemakkelijk bereikbaar, komt afspraken na. Een aanrader!",
+      "rating": 5,
+      "source": "online catalogus (exa.ai listing)",
+      "date": "2024-11"
+    },
+    {
+      "author": "Klant, Torhout",
+      "text": "PV installatie Gedetailleerde offerte, goede uitleg, stipt, correcte afwerking. Nick houdt zich aan zijn woord. Kortom een aanrader!",
+      "rating": 5,
+      "source": "online catalogus (exa.ai listing)",
+      "date": "2023-12"
+    },
+    {
+      "author": "Klant, Torhout",
+      "text": "Nick is altijd gemakkelijk te bereiken of neemt terug contact op indien hij niet kan opnemen. Hij komt de gemaakte afspraken na en dat is een plezier om mee samen te werken. Ik heb geen verstand van elektriciteit, maar Nick legt zonder moeite uit wat hij kan of zal doen. Hij luistert naar mijn voorstellen en helpt tegelijk mee nadenken. Zijn werk is proper en correct uitgevoerd. Als je een elektricien zoekt, één adres!",
+      "rating": 5,
+      "source": "online catalogus (exa.ai listing)",
+      "date": "2023-12"
+    }
+  ]
+}
